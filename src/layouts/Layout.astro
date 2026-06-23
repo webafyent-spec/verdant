@@ -41,118 +41,129 @@ const {
     <slot />
 
     <!-- ============================================================
-         GLOBAL JAVASCRIPT
+         GLOBAL JAVASCRIPT — is:inline bypasses Astro bundling,
+         runs directly as a classic script after body parses
          ============================================================ -->
-    <script>
-      // ── AGE GATE ──────────────────────────────────────────────
-      (function () {
-        const gate   = document.getElementById('age-gate') as HTMLElement | null;
-        const content   = document.getElementById('age-content') as HTMLElement | null;
-        const rejected  = document.getElementById('age-rejected') as HTMLElement | null;
-        const confirmBtn= document.getElementById('age-confirm') as HTMLElement | null;
-        const denyBtn   = document.getElementById('age-deny') as HTMLElement | null;
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function () {
 
-        if (!gate) return;
+        // ── AGE GATE ────────────────────────────────────────────
+        var gate       = document.getElementById('age-gate');
+        var ageContent = document.getElementById('age-content');
+        var rejected   = document.getElementById('age-rejected');
+        var confirmBtn = document.getElementById('age-confirm');
+        var denyBtn    = document.getElementById('age-deny');
 
-        if (sessionStorage.getItem('vrd-age-verified') === '1') {
-          gate.classList.add('gone');
-          return;
+        function triggerHero() {
+          document.querySelectorAll('.hero-line').forEach(function(el) {
+            el.classList.add('animated');
+          });
         }
 
-        confirmBtn?.addEventListener('click', () => {
-          sessionStorage.setItem('vrd-age-verified', '1');
-          gate.classList.add('fade-out');
-          setTimeout(() => gate.classList.add('gone'), 950);
-          // Trigger hero animations
-          document.querySelectorAll('.hero-line').forEach(el => el.classList.add('animated'));
-        });
+        if (gate) {
+          if (sessionStorage.getItem('vrd-age-verified') === '1') {
+            gate.classList.add('gone');
+            setTimeout(triggerHero, 80);
+          } else {
+            if (confirmBtn) {
+              confirmBtn.addEventListener('click', function () {
+                sessionStorage.setItem('vrd-age-verified', '1');
+                gate.classList.add('fade-out');
+                setTimeout(function () { gate.classList.add('gone'); }, 950);
+                setTimeout(triggerHero, 200);
+              });
+            }
+            if (denyBtn) {
+              denyBtn.addEventListener('click', function () {
+                if (ageContent) ageContent.classList.add('hidden');
+                if (rejected)   rejected.classList.add('visible');
+              });
+            }
+          }
+        }
 
-        denyBtn?.addEventListener('click', () => {
-          if (content) content.classList.add('hidden');
-          if (rejected) rejected.classList.add('visible');
-        });
-      })();
+        // ── NAV SCROLL ──────────────────────────────────────────
+        var nav = document.getElementById('main-nav');
+        if (nav) {
+          function onScroll() {
+            if (window.scrollY > 60) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+          }
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll();
+        }
 
-      // ── NAV SCROLL ────────────────────────────────────────────
-      (function () {
-        const nav = document.getElementById('main-nav');
-        if (!nav) return;
-        const onScroll = () => {
-          if (window.scrollY > 60) nav.classList.add('scrolled');
-          else nav.classList.remove('scrolled');
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-      })();
+        // ── MOBILE MENU ─────────────────────────────────────────
+        var burger   = document.getElementById('burger');
+        var closeBtn = document.getElementById('menu-close');
+        var mobileMenu = document.getElementById('mobile-menu');
 
-      // ── MOBILE MENU ───────────────────────────────────────────
-      (function () {
-        const burger = document.getElementById('burger');
-        const closeBtn = document.getElementById('menu-close');
-        const menu   = document.getElementById('mobile-menu');
-        const links  = menu?.querySelectorAll('a');
-        if (!burger || !menu) return;
+        if (burger && mobileMenu) {
+          function openMenu()  { mobileMenu.classList.add('open');    document.body.style.overflow = 'hidden'; }
+          function closeMenu() { mobileMenu.classList.remove('open'); document.body.style.overflow = ''; }
 
-        const openMenu  = () => { menu.classList.add('open'); document.body.style.overflow = 'hidden'; };
-        const closeMenu = () => { menu.classList.remove('open'); document.body.style.overflow = ''; };
+          burger.addEventListener('click', openMenu);
+          if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+          mobileMenu.querySelectorAll('a').forEach(function(l) {
+            l.addEventListener('click', closeMenu);
+          });
+        }
 
-        burger.addEventListener('click', openMenu);
-        closeBtn?.addEventListener('click', closeMenu);
-        links?.forEach(l => l.addEventListener('click', closeMenu));
-      })();
+        // ── CATEGORY FILTER ─────────────────────────────────────
+        var pills = document.querySelectorAll('.cat-pill');
+        var cards = document.querySelectorAll('.product-card-wrap');
 
-      // ── CATEGORY FILTER ───────────────────────────────────────
-      (function () {
-        const pills = document.querySelectorAll('.cat-pill');
-        const cards = document.querySelectorAll('.product-card-wrap');
-        if (!pills.length) return;
-
-        pills.forEach(pill => {
-          pill.addEventListener('click', () => {
-            pills.forEach(p => p.classList.remove('active'));
+        pills.forEach(function(pill) {
+          pill.addEventListener('click', function () {
+            pills.forEach(function(p) { p.classList.remove('active'); });
             pill.classList.add('active');
 
-            const cat = (pill as HTMLElement).dataset.cat || 'ALL';
-            cards.forEach(card => {
-              const el = card as HTMLElement;
-              if (cat === 'ALL' || el.dataset.category === cat) {
-                el.classList.remove('hidden-product');
+            var cat = pill.dataset.cat || 'ALL';
+            cards.forEach(function(card) {
+              if (cat === 'ALL' || card.dataset.category === cat) {
+                card.classList.remove('hidden-product');
               } else {
-                el.classList.add('hidden-product');
+                card.classList.add('hidden-product');
               }
             });
           });
         });
-      })();
 
-      // ── SCROLL ANIMATIONS (IntersectionObserver) ──────────────
-      (function () {
+        // ── SCROLL ANIMATIONS ───────────────────────────────────
+        var animEls = document.querySelectorAll('[data-animate]');
+
+        if (!animEls.length) return;
+
         if (!('IntersectionObserver' in window)) {
-          document.querySelectorAll('[data-animate]').forEach(el => el.classList.add('animated'));
+          // Fallback: show all immediately
+          animEls.forEach(function(el) { el.classList.add('animated'); });
           return;
         }
-        const io = new IntersectionObserver(
-          entries => {
-            entries.forEach(e => {
-              if (e.isIntersecting) {
-                e.target.classList.add('animated');
-                io.unobserve(e.target);
-              }
-            });
-          },
-          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-        document.querySelectorAll('[data-animate]').forEach(el => io.observe(el));
-      })();
 
-      // ── HERO LINES (fire after age gate if already verified) ──
-      (function () {
-        if (sessionStorage.getItem('vrd-age-verified') === '1') {
-          requestAnimationFrame(() => {
-            document.querySelectorAll('.hero-line').forEach(el => el.classList.add('animated'));
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('animated');
+              io.unobserve(e.target);
+            }
           });
-        }
-      })();
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+        animEls.forEach(function(el) { io.observe(el); });
+
+        // Safety fallback: force-reveal anything still hidden after 3s
+        setTimeout(function() {
+          animEls.forEach(function(el) {
+            if (!el.classList.contains('animated')) {
+              el.classList.add('animated');
+            }
+          });
+        }, 3000);
+
+      }); // end DOMContentLoaded
     </script>
   </body>
 </html>
