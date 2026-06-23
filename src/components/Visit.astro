@@ -1,0 +1,128 @@
+---
+// Section 8 — Visit Us: Two-column with details and map placeholder
+---
+
+<section id="visit" class="grain" style="background-color:#080C08;padding:7rem 0;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;" id="visit-grid">
+
+    <!-- LEFT — Info -->
+    <div data-animate>
+      <p class="gold-label" style="margin-bottom:1.25rem;">Visit Us</p>
+
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,3.25rem);font-style:italic;font-weight:400;color:#F5F0E8;margin:0 0 0.5rem;line-height:1.1;">
+        Come in. Our team<br />is ready.
+      </h2>
+      <div style="width:44px;height:2px;background:#C9A84C;margin-bottom:2.25rem;"></div>
+
+      <p style="font-family:'Jost',sans-serif;font-size:0.9375rem;color:#9DB8A0;line-height:1.8;margin:0 0 2.5rem;">
+        Walk-ins welcome. No appointment needed. Our budtenders will guide you through our full collection and help you find exactly what you are looking for.
+      </p>
+
+      <!-- Contact details -->
+      <div style="margin-bottom:2.5rem;">
+        <div class="detail-row">
+          <span style="font-size:1.125rem;flex-shrink:0;margin-top:2px;" aria-hidden="true">📍</span>
+          <div>
+            <p style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#F5F0E8;margin:0;line-height:1.5;">18 Church Street<br />Pietermaritzburg, 3201</p>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span style="font-size:1.125rem;flex-shrink:0;" aria-hidden="true">📞</span>
+          <a href="tel:0333420180" style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#F5F0E8;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#F5F0E8'">
+            033 342 0180
+          </a>
+        </div>
+        <div class="detail-row">
+          <span style="font-size:1.125rem;flex-shrink:0;" aria-hidden="true">✉️</span>
+          <a href="mailto:hello@verdant.co.za" style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#F5F0E8;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#F5F0E8'">
+            hello@verdant.co.za
+          </a>
+        </div>
+        <div class="detail-row">
+          <span style="font-size:1.125rem;flex-shrink:0;margin-top:2px;" aria-hidden="true">⏰</span>
+          <div>
+            <p style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#F5F0E8;margin:0;line-height:1.65;">
+              Mon — Sat: 09:00 — 19:00<br />
+              Sunday: 10:00 — 17:00
+            </p>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span style="font-size:1.125rem;flex-shrink:0;" aria-hidden="true">📱</span>
+          <a href="https://instagram.com/verdant.pmb" target="_blank" rel="noopener noreferrer" style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#F5F0E8;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#F5F0E8'">
+            @verdant.pmb
+          </a>
+        </div>
+      </div>
+
+      <!-- Pill badges -->
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <span style="font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.08em;color:#C9A84C;border:1px solid rgba(201,168,76,0.35);padding:7px 16px;border-radius:99px;background:rgba(201,168,76,0.06);">
+          🌿 Walk-ins welcome
+        </span>
+        <span style="font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.08em;color:#C9A84C;border:1px solid rgba(201,168,76,0.35);padding:7px 16px;border-radius:99px;background:rgba(201,168,76,0.06);">
+          🔞 Strict 18+ ID required
+        </span>
+        <span style="font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.08em;color:#C9A84C;border:1px solid rgba(201,168,76,0.35);padding:7px 16px;border-radius:99px;background:rgba(201,168,76,0.06);">
+          💳 Card and cash accepted
+        </span>
+      </div>
+    </div>
+
+    <!-- RIGHT — Map placeholder -->
+    <div data-animate data-delay="2">
+      <div class="map-placeholder" role="img" aria-label="Map showing 18 Church Street, Pietermaritzburg">
+        <!-- Corner accents -->
+        <div class="map-corner tl"></div>
+        <div class="map-corner tr"></div>
+        <div class="map-corner bl"></div>
+        <div class="map-corner br"></div>
+
+        <!-- Subtle grid lines -->
+        <div style="position:absolute;inset:0;opacity:0.04;" aria-hidden="true">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+          </svg>
+        </div>
+
+        <!-- Map pin icon -->
+        <div style="text-align:center;position:relative;z-index:2;padding:2rem;">
+          <div style="font-size:2.5rem;margin-bottom:1.25rem;">📍</div>
+          <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.375rem;font-style:italic;color:#C9A84C;margin-bottom:0.5rem;">
+            18 Church Street
+          </div>
+          <div style="font-family:'Jost',sans-serif;font-size:0.75rem;color:#74C69D;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;">
+            Pietermaritzburg, 3201
+          </div>
+          <a
+            href="https://maps.google.com/?q=18+Church+Street+Pietermaritzburg"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-outline"
+            style="font-size:0.65rem;padding:10px 20px;"
+          >
+            Open in Maps →
+          </a>
+        </div>
+      </div>
+
+      <p style="font-family:'Jost',sans-serif;font-size:0.72rem;font-style:italic;color:rgba(157,184,160,0.55);text-align:center;margin-top:1.25rem;letter-spacing:0.04em;">
+        Bring valid South African ID. 18+ strictly enforced.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 900px) {
+    #visit-grid {
+      grid-template-columns: 1fr !important;
+      gap: 3rem !important;
+    }
+  }
+</style>

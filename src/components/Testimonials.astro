@@ -1,0 +1,105 @@
+---
+// Section 7 — Community testimonials
+
+interface Testimonial {
+  quote: string;
+  name: string;
+  location: string;
+}
+
+const testimonials: Testimonial[] = [
+  {
+    quote: 'I have tried dispensaries in Cape Town and Johannesburg. Verdant is genuinely on par with the best of them — and it is right here in PMB. The staff know their product inside out.',
+    name: 'Michael T.',
+    location: 'Pietermaritzburg',
+  },
+  {
+    quote: 'Finally a cannabis store that does not feel sketchy. Clean, calm, knowledgeable staff. The Ember Drops tincture changed my sleep completely. Nothing else comes close.',
+    name: 'Priya N.',
+    location: 'Pietermaritzburg',
+  },
+  {
+    quote: 'The Durban Poison is the real deal. Locally grown, properly cured, beautifully presented. Verdant has set the standard for what a cannabis store should be in South Africa.',
+    name: 'James K.',
+    location: 'Howick',
+  },
+];
+---
+
+<!-- Wave into section -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C300,56 900,0 1440,40 L1440,0 L0,0Z" fill="#0D140D"/>
+  </svg>
+</div>
+
+<section style="background-color:#1B4332;padding:6rem 0 7rem;position:relative;overflow:hidden;">
+
+  <!-- Subtle botanical watermark in background -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:800px;opacity:0.04;pointer-events:none;" aria-hidden="true">
+    <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <g stroke="#F5F0E8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M60 155 C60 155 58 133 60 115"/>
+        <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
+        <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
+        <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
+        <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
+        <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Section header -->
+  <div style="text-align:center;padding:0 2rem;margin-bottom:4rem;position:relative;z-index:2;" data-animate>
+    <p class="gold-label" style="margin-bottom:1.25rem;">What People Say</p>
+    <h2 class="gold-underline" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4.5vw,3.25rem);font-style:italic;font-weight:400;color:#F5F0E8;margin:0 auto;line-height:1.1;">
+      From our community
+    </h2>
+  </div>
+
+  <!-- Testimonials grid -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem;position:relative;z-index:2;" id="testimonials-grid">
+    {testimonials.map((t, i) => (
+      <article class="testimonial-card" data-animate data-delay={String(i + 1)}>
+
+        <!-- Large opening quote mark -->
+        <span class="quote-mark" aria-hidden="true">"</span>
+
+        <!-- Quote body -->
+        <blockquote style="margin:0 0 2rem;">
+          <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;font-style:italic;color:#F5F0E8;line-height:1.8;margin:0;">
+            {t.quote}
+          </p>
+        </blockquote>
+
+        <!-- Divider -->
+        <div style="width:32px;height:1px;background:rgba(201,168,76,0.4);margin-bottom:1.25rem;"></div>
+
+        <!-- Attribution -->
+        <div>
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:4px;">
+            <span style="font-family:'Jost',sans-serif;font-size:0.8rem;font-weight:600;color:#F5F0E8;letter-spacing:0.04em;">— {t.name}</span>
+            <span style="color:#C9A84C;font-size:0.7rem;letter-spacing:0.05em;">★★★★★</span>
+          </div>
+          <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#74C69D;letter-spacing:0.08em;">{t.location}</span>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<!-- Wave out of section -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,56 C360,0 1080,56 1440,20 L1440,56 L0,56Z" fill="#080C08"/>
+  </svg>
+</div>
+
+<style>
+  @media (max-width: 900px) {
+    #testimonials-grid {
+      grid-template-columns: 1fr !important;
+      max-width: 560px;
+    }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+// Section 9 — Full-width gold CTA strip
+---
+
+<!-- Dark wave top divider -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C480,56 960,0 1440,48 L1440,0 L0,0Z" fill="#080C08"/>
+  </svg>
+</div>
+
+<section style="background-color:#C9A84C;padding:6rem 2rem;position:relative;overflow:hidden;">
+
+  <!-- Noise texture on gold -->
+  <div style="position:absolute;inset:0;opacity:0.05;background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'200'%20height%3D'200'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'0.85'%20numOctaves%3D'4'%20stitchTiles%3D'stitch'%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D'200'%20height%3D'200'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E);pointer-events:none;" aria-hidden="true"></div>
+
+  <!-- Large botanical outline watermark -->
+  <div style="position:absolute;right:-60px;top:50%;transform:translateY(-50%);opacity:0.06;pointer-events:none;" aria-hidden="true">
+    <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="320" height="420">
+      <g stroke="#080C08" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M60 155 C60 155 58 133 60 115"/>
+        <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
+        <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
+        <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
+        <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
+        <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
+        <path d="M52 112 C42 110 28 115 16 115 C25 118 38 117 54 115Z"/>
+        <path d="M68 112 C78 110 92 115 104 115 C95 118 82 117 66 115Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Content -->
+  <div style="max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:2;" data-animate>
+
+    <!-- Divider -->
+    <div style="width:40px;height:1px;background:rgba(8,12,8,0.35);margin:0 auto 2.5rem;"></div>
+
+    <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.75rem,7vw,5rem);font-style:italic;font-weight:400;color:#080C08;margin:0 0 1.25rem;line-height:1.0;letter-spacing:-0.01em;">
+      Ready to explore?
+    </h2>
+
+    <p style="font-family:'Jost',sans-serif;font-size:0.9375rem;color:rgba(8,12,8,0.65);margin:0 0 2.75rem;line-height:1.65;">
+      Visit us in store or browse our collection online.<br />PMB's finest awaits you.
+    </p>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;">
+      <a href="#products" class="btn-dark">Shop the Collection</a>
+      <a href="#visit"    class="btn-dark-outline">Find Us</a>
+    </div>
+
+    <!-- Fine print -->
+    <p style="font-family:'Jost',sans-serif;font-size:0.7rem;font-style:italic;color:rgba(8,12,8,0.45);letter-spacing:0.04em;">
+      Must be 18 or older. Valid South African ID required upon entry.
+    </p>
+  </div>
+</section>

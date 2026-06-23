@@ -1,0 +1,158 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Verdant — The Finest. Naturally.',
+  description = "Pietermaritzburg's first premium cannabis dispensary. Curated flower, vapes, edibles, tinctures and accessories. 18 Church Street, PMB. Open Mon–Sat 09:00–19:00.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#080C08" />
+    <title>{title}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Fonts — preconnect for speed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles injected via Astro frontmatter import -->
+  </head>
+  <body>
+    <slot />
+
+    <!-- ============================================================
+         GLOBAL JAVASCRIPT
+         ============================================================ -->
+    <script>
+      // ── AGE GATE ──────────────────────────────────────────────
+      (function () {
+        const gate   = document.getElementById('age-gate') as HTMLElement | null;
+        const content   = document.getElementById('age-content') as HTMLElement | null;
+        const rejected  = document.getElementById('age-rejected') as HTMLElement | null;
+        const confirmBtn= document.getElementById('age-confirm') as HTMLElement | null;
+        const denyBtn   = document.getElementById('age-deny') as HTMLElement | null;
+
+        if (!gate) return;
+
+        if (sessionStorage.getItem('vrd-age-verified') === '1') {
+          gate.classList.add('gone');
+          return;
+        }
+
+        confirmBtn?.addEventListener('click', () => {
+          sessionStorage.setItem('vrd-age-verified', '1');
+          gate.classList.add('fade-out');
+          setTimeout(() => gate.classList.add('gone'), 950);
+          // Trigger hero animations
+          document.querySelectorAll('.hero-line').forEach(el => el.classList.add('animated'));
+        });
+
+        denyBtn?.addEventListener('click', () => {
+          if (content) content.classList.add('hidden');
+          if (rejected) rejected.classList.add('visible');
+        });
+      })();
+
+      // ── NAV SCROLL ────────────────────────────────────────────
+      (function () {
+        const nav = document.getElementById('main-nav');
+        if (!nav) return;
+        const onScroll = () => {
+          if (window.scrollY > 60) nav.classList.add('scrolled');
+          else nav.classList.remove('scrolled');
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+
+      // ── MOBILE MENU ───────────────────────────────────────────
+      (function () {
+        const burger = document.getElementById('burger');
+        const closeBtn = document.getElementById('menu-close');
+        const menu   = document.getElementById('mobile-menu');
+        const links  = menu?.querySelectorAll('a');
+        if (!burger || !menu) return;
+
+        const openMenu  = () => { menu.classList.add('open'); document.body.style.overflow = 'hidden'; };
+        const closeMenu = () => { menu.classList.remove('open'); document.body.style.overflow = ''; };
+
+        burger.addEventListener('click', openMenu);
+        closeBtn?.addEventListener('click', closeMenu);
+        links?.forEach(l => l.addEventListener('click', closeMenu));
+      })();
+
+      // ── CATEGORY FILTER ───────────────────────────────────────
+      (function () {
+        const pills = document.querySelectorAll('.cat-pill');
+        const cards = document.querySelectorAll('.product-card-wrap');
+        if (!pills.length) return;
+
+        pills.forEach(pill => {
+          pill.addEventListener('click', () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const cat = (pill as HTMLElement).dataset.cat || 'ALL';
+            cards.forEach(card => {
+              const el = card as HTMLElement;
+              if (cat === 'ALL' || el.dataset.category === cat) {
+                el.classList.remove('hidden-product');
+              } else {
+                el.classList.add('hidden-product');
+              }
+            });
+          });
+        });
+      })();
+
+      // ── SCROLL ANIMATIONS (IntersectionObserver) ──────────────
+      (function () {
+        if (!('IntersectionObserver' in window)) {
+          document.querySelectorAll('[data-animate]').forEach(el => el.classList.add('animated'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          entries => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                e.target.classList.add('animated');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        document.querySelectorAll('[data-animate]').forEach(el => io.observe(el));
+      })();
+
+      // ── HERO LINES (fire after age gate if already verified) ──
+      (function () {
+        if (sessionStorage.getItem('vrd-age-verified') === '1') {
+          requestAnimationFrame(() => {
+            document.querySelectorAll('.hero-line').forEach(el => el.classList.add('animated'));
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

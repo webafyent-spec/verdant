@@ -1,0 +1,84 @@
+---
+// Section 6 — Cannabis 101: Four education cards
+
+interface EduCard {
+  roman: string;
+  title: string;
+  body: string;
+}
+
+const cards: EduCard[] = [
+  {
+    roman: 'I',
+    title: 'Sativa vs Indica vs Hybrid',
+    body: 'Sativa strains tend to energise and uplift — ideal for daytime use. Indica strains tend to relax and sedate — suited to evening and recovery. Hybrids offer a considered balance of both. Our staff will help you find your perfect match.',
+  },
+  {
+    roman: 'II',
+    title: 'CBD vs THC — What\'s the difference?',
+    body: 'THC is the psychoactive compound that creates the classic cannabis experience. CBD is non-psychoactive and used primarily for wellness and therapeutic purposes. Many of our products contain both compounds in carefully calibrated ratios.',
+  },
+  {
+    roman: 'III',
+    title: 'How to choose the right product',
+    body: 'First time? Start low and go slow. Edibles take longer to kick in than flower or vapes. Tinctures offer precise, consistent dosing. Speak to our budtenders — we are here to guide you without judgement.',
+  },
+  {
+    roman: 'IV',
+    title: 'Consumption methods explained',
+    body: 'Flower is smoked or dry-vaped for near-instant effect. Vape cartridges offer a cleaner, more discreet experience. Edibles are metabolised differently — effects are stronger and longer lasting. Tinctures are placed under the tongue for rapid absorption.',
+  },
+];
+---
+
+<!-- Top wave into this section -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,56 C480,0 960,56 1440,20 L1440,56 L0,56Z" fill="#0D140D"/>
+  </svg>
+</div>
+
+<section id="education" class="grain" style="background-color:#0D140D;padding:6rem 0 7rem;">
+
+  <!-- Section header -->
+  <div style="text-align:center;padding:0 2rem;margin-bottom:4rem;" data-animate>
+    <p class="gold-label" style="margin-bottom:1.25rem;">Know Your Plant</p>
+    <h2 class="gold-underline" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.25rem,5vw,3.5rem);font-style:italic;font-weight:400;color:#F5F0E8;margin:0 auto;line-height:1.1;">
+      Cannabis 101
+    </h2>
+    <p style="font-family:'Jost',sans-serif;color:#9DB8A0;font-size:0.9rem;line-height:1.75;max-width:500px;margin:2rem auto 0;">
+      Our team is here to guide you. Here is what every first-time visitor should know.
+    </p>
+  </div>
+
+  <!-- Education cards grid -->
+  <div style="max-width:1100px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:repeat(2,1fr);gap:1.75rem;" id="edu-grid">
+    {cards.map((card, i) => (
+      <article class="edu-card" data-animate data-delay={String(i + 1)}>
+        <!-- Roman numeral watermark -->
+        <span class="edu-roman" aria-hidden="true">{card.roman}</span>
+
+        <!-- Card content -->
+        <div>
+          <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-style:italic;color:#C9A84C;margin:0 0 1rem;line-height:1.2;padding-right:3.5rem;">
+            {card.title}
+          </h3>
+          <p style="font-family:'Jost',sans-serif;font-size:0.875rem;color:#9DB8A0;line-height:1.85;margin:0;">
+            {card.body}
+          </p>
+        </div>
+
+        <!-- Bottom gold accent -->
+        <div style="width:24px;height:2px;background:rgba(201,168,76,0.4);margin-top:1.75rem;"></div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #edu-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

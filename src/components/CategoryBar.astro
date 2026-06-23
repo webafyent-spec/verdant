@@ -1,0 +1,35 @@
+---
+// Section 2 — Category filter bar with wavy dividers
+---
+
+<!-- Top wave divider (dark coming down into deep green) -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C200,56 400,0 720,28 C1040,56 1280,8 1440,32 L1440,0 L0,0Z" fill="#080C08"/>
+  </svg>
+</div>
+
+<div style="background-color:#1B4332;padding:2.75rem 2rem;">
+  <div style="max-width:900px;margin:0 auto;">
+
+    <!-- Label -->
+    <p class="gold-label" style="text-align:center;margin-bottom:1.5rem;opacity:0.7;">Browse by category</p>
+
+    <!-- Category pills -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.875rem;flex-wrap:wrap;" role="group" aria-label="Filter products by category">
+      <button class="cat-pill active" data-cat="ALL" type="button">🌿 All Products</button>
+      <button class="cat-pill" data-cat="FLOWER" type="button">🌿 Flower</button>
+      <button class="cat-pill" data-cat="VAPE" type="button">💨 Vapes</button>
+      <button class="cat-pill" data-cat="EDIBLE" type="button">🍫 Edibles</button>
+      <button class="cat-pill" data-cat="TINCTURE" type="button">💧 Tinctures</button>
+      <button class="cat-pill" data-cat="ACCESSORY" type="button">🛍️ Accessories</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom wave divider (deep green fading into dark) -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,56 C200,0 500,56 720,28 C940,0 1200,48 1440,24 L1440,56 L0,56Z" fill="#0D140D"/>
+  </svg>
+</div>
