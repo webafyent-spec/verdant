@@ -1,85 +1,61 @@
 ---
-// Fixed navigation — transparent on hero, dark on scroll
+// Navigation — fixed, transparent, split-text hover, mobile overlay
+const links = ['Products','Strains','About','Visit'];
 ---
 
-<!-- Mobile Menu Overlay -->
-<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
-  <button id="menu-close" aria-label="Close menu" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;color:#F5F0E8;padding:0.5rem;">
+<!-- Mobile Menu -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <button id="menu-close" aria-label="Close menu" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;color:#FFFFFF;padding:0.5rem;z-index:10;">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
     </svg>
   </button>
-
-  <!-- Mobile logo -->
-  <div style="position:absolute;top:1.75rem;left:2rem;display:flex;align-items:center;gap:0.6rem;">
-    <svg width="18" height="24" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M60 155 C60 155 58 133 60 115"/>
-        <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
-        <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
-        <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
-        <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
-        <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
-      </g>
-    </svg>
-    <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.25rem;font-style:italic;color:#C9A84C;letter-spacing:0.06em;">VERDANT</span>
+  <!-- offset first child stagger -->
+  <span style="display:none;"></span>
+  {links.map((l) => (
+    <a href={`#${l.toLowerCase()}`} class="mobile-nav-link">{l}</a>
+  ))}
+  <div style="position:absolute;bottom:3rem;left:3rem;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#8B949E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">PMB · 18+ Only</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:#00C896;">hello@verdant.co.za</div>
   </div>
-
-  <!-- Mobile nav links -->
-  <a href="#home"      class="mobile-nav-link">Home</a>
-  <a href="#products"  class="mobile-nav-link">Products</a>
-  <a href="#about"     class="mobile-nav-link">About</a>
-  <a href="#education" class="mobile-nav-link">Education</a>
-  <a href="#visit"     class="mobile-nav-link">Visit Us</a>
-
-  <!-- Divider + contact -->
-  <div style="width:40px;height:1px;background:#C9A84C;margin:0.5rem auto;"></div>
-  <a href="tel:0333420180" style="font-family:'Jost',sans-serif;font-size:0.75rem;color:#74C69D;letter-spacing:0.14em;text-decoration:none;">033 342 0180</a>
 </div>
 
 <!-- Main Nav -->
-<nav
-  id="main-nav"
-  style="position:fixed;top:0;left:0;right:0;z-index:5000;padding:1.125rem 2.5rem;display:flex;align-items:center;justify-content:space-between;"
-  aria-label="Main navigation"
->
+<nav id="main-nav" aria-label="Main navigation">
   <!-- Logo -->
-  <a href="#home" style="display:flex;align-items:center;gap:0.625rem;text-decoration:none;flex-shrink:0;" aria-label="Verdant home">
-    <svg width="20" height="27" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M60 155 C60 155 58 133 60 115"/>
-        <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
-        <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
-        <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
-        <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
-        <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
-      </g>
-    </svg>
-    <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.375rem;font-style:italic;font-weight:500;color:#C9A84C;letter-spacing:0.06em;">VERDANT</span>
+  <a href="#home" style="text-decoration:none;display:flex;align-items:baseline;gap:0.1rem;flex-shrink:0;" aria-label="Verdant home">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#00C896;letter-spacing:-0.04em;line-height:1;">V</span>
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:1.125rem;font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;line-height:1;">ERDANT</span>
   </a>
 
-  <!-- Desktop nav links -->
-  <div class="hide-mobile" style="display:flex;align-items:center;gap:2.5rem;">
-    <a href="#products"  class="nav-link">Products</a>
-    <a href="#about"     class="nav-link">About</a>
-    <a href="#education" class="nav-link">Education</a>
-    <a href="#visit"     class="nav-link">Visit Us</a>
+  <!-- Desktop links (right side) -->
+  <div style="display:flex;align-items:center;gap:2.5rem;" class="hide-mobile">
+    {links.map((l) => (
+      <a href={`#${l.toLowerCase()}`} class="nav-link" aria-label={l}>
+        <span class="nav-link-inner">
+          <span class="nav-link-text">{l}</span>
+          <span class="nav-link-hover">{l}</span>
+        </span>
+      </a>
+    ))}
+    <div class="badge-18" aria-label="Adults 18 and older only">18+</div>
   </div>
 
-  <!-- Right actions -->
-  <div style="display:flex;align-items:center;gap:1.25rem;flex-shrink:0;">
-    <a href="#products" class="btn-outline hide-mobile" style="padding:9px 22px;font-size:0.65rem;">Shop Now</a>
-
-    <!-- 18+ badge -->
-    <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid #C9A84C;display:flex;align-items:center;justify-content:center;flex-shrink:0;" aria-label="Adults 18 and older only">
-      <span style="font-family:'Jost',sans-serif;font-size:0.58rem;font-weight:600;color:#C9A84C;letter-spacing:0.02em;">18+</span>
-    </div>
-
-    <!-- Hamburger -->
-    <button id="burger" class="hide-desktop" aria-label="Open navigation menu" style="background:none;border:none;cursor:pointer;padding:0.25rem;color:#F5F0E8;display:flex;align-items:center;justify-content:center;">
+  <!-- Mobile controls -->
+  <div style="display:flex;align-items:center;gap:1rem;" class="hide-desktop">
+    <div class="badge-18">18+</div>
+    <button id="burger" aria-label="Open navigation" style="background:none;border:none;cursor:pointer;color:#FFFFFF;padding:0.25rem;display:flex;align-items:center;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
   </div>
 </nav>
+
+<style>
+  @media (max-width: 768px) { .hide-mobile { display: none !important; } }
+  @media (min-width: 769px) { .hide-desktop { display: none !important; } }
+</style>

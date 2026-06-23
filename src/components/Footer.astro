@@ -1,102 +1,49 @@
 ---
-// Footer — three-column with brand, products, visit + legal strip
+// Footer — single row layout, minimal and clean
 ---
 
-<footer style="background-color:#060A06;border-top:1px solid rgba(201,168,76,0.35);">
+<footer style="background:#06080A;border-top:1px solid #00C896;">
 
-  <!-- Main footer columns -->
-  <div style="max-width:1200px;margin:0 auto;padding:5rem 2rem 3.5rem;display:grid;grid-template-columns:2fr 1fr 1.5fr;gap:4rem;" id="footer-grid">
+  <!-- Main row -->
+  <div style="max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;" id="footer-grid">
 
-    <!-- Column 1 — Brand -->
+    <!-- Left — brand -->
     <div>
-      <!-- Logo -->
-      <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:1rem;">
-        <svg width="22" height="30" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <g stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M60 155 C60 155 58 133 60 115"/>
-            <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
-            <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
-            <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
-            <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
-            <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
-          </g>
-        </svg>
-        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.625rem;font-style:italic;font-weight:500;color:#C9A84C;letter-spacing:0.06em;">VERDANT</span>
+      <div style="display:flex;align-items:baseline;gap:0.1rem;margin-bottom:0.5rem;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:#00C896;letter-spacing:-0.04em;line-height:1;">V</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:1.125rem;font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;line-height:1;">ERDANT</span>
       </div>
-
-      <p style="font-family:'Jost',sans-serif;font-size:0.82rem;font-style:italic;color:#74C69D;margin:0 0 0.5rem;letter-spacing:0.06em;">
-        The Finest. Naturally.
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;color:#00C896;text-transform:uppercase;">
+        PMB · 18+ Only
       </p>
-      <p style="font-family:'Jost',sans-serif;font-size:0.72rem;color:rgba(157,184,160,0.5);margin:0 0 1.75rem;letter-spacing:0.04em;">
-        18 Church Street, PMB · Est. 2024
-      </p>
-
-      <!-- Description -->
-      <p style="font-family:'Jost',sans-serif;font-size:0.8125rem;color:rgba(157,184,160,0.6);line-height:1.75;max-width:300px;margin:0 0 1.75rem;">
-        Pietermaritzburg's premium cannabis dispensary. Curated flower, vapes, edibles, tinctures and accessories for the discerning adult.
-      </p>
-
-      <!-- Social -->
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;">
-        <a href="https://instagram.com/verdant.pmb" target="_blank" rel="noopener noreferrer" style="font-family:'Jost',sans-serif;font-size:0.72rem;color:rgba(157,184,160,0.6);text-decoration:none;letter-spacing:0.08em;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(157,184,160,0.6)'">
-          IG / @verdant.pmb
-        </a>
-      </div>
-
-      <!-- 18+ notice -->
-      <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:6px 14px;border-radius:99px;border:1px solid rgba(201,168,76,0.25);background:rgba(201,168,76,0.04);">
-        <span style="font-family:'Jost',sans-serif;font-size:0.65rem;color:rgba(201,168,76,0.6);letter-spacing:0.1em;">🔞 For adults 18+ only</span>
-      </div>
     </div>
 
-    <!-- Column 2 — Products -->
-    <div>
-      <p style="font-family:'Jost',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C9A84C;margin:0 0 1.5rem;">Products</p>
-      <nav aria-label="Footer product links">
-        <a href="#products" class="footer-link">Flower</a>
-        <a href="#products" class="footer-link">Vapes</a>
-        <a href="#products" class="footer-link">Edibles</a>
-        <a href="#products" class="footer-link">Tinctures</a>
-        <a href="#products" class="footer-link">Accessories</a>
-        <a href="#products" class="footer-link" style="margin-top:0.75rem;">View All Products →</a>
-      </nav>
-    </div>
+    <!-- Center — nav links -->
+    <nav aria-label="Footer navigation" style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;justify-content:center;">
+      <a href="#products"  class="footer-link">Products</a>
+      <a href="#strains"   class="footer-link">Strains</a>
+      <a href="#about"     class="footer-link">About</a>
+      <a href="#visit"     class="footer-link">Visit</a>
+    </nav>
 
-    <!-- Column 3 — Visit -->
-    <div>
-      <p style="font-family:'Jost',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C9A84C;margin:0 0 1.5rem;">Visit Us</p>
-
-      <div style="font-family:'Jost',sans-serif;font-size:0.8125rem;color:rgba(157,184,160,0.7);line-height:1.75;margin-bottom:1.5rem;">
-        <p style="margin:0 0 0.25rem;color:#F5F0E8;">18 Church Street</p>
-        <p style="margin:0 0 1rem;">Pietermaritzburg, 3201</p>
-        <a href="tel:0333420180" style="display:block;color:rgba(157,184,160,0.7);text-decoration:none;margin-bottom:0.25rem;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(157,184,160,0.7)'">033 342 0180</a>
-        <a href="mailto:hello@verdant.co.za" style="display:block;color:rgba(157,184,160,0.7);text-decoration:none;margin-bottom:1rem;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(157,184,160,0.7)'">hello@verdant.co.za</a>
-        <p style="margin:0 0 0.25rem;">Mon — Sat: 09:00 — 19:00</p>
-        <p style="margin:0 0 1.25rem;">Sunday: 10:00 — 17:00</p>
-        <a href="https://instagram.com/verdant.pmb" target="_blank" rel="noopener noreferrer" style="color:rgba(157,184,160,0.7);text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(157,184,160,0.7)'">Instagram: @verdant.pmb</a>
-      </div>
+    <!-- Right — contact -->
+    <div style="text-align:right;">
+      <a href="mailto:hello@verdant.co.za" style="font-family:'Space Grotesk',sans-serif;font-size:0.875rem;font-weight:600;color:#FFFFFF;text-decoration:none;display:block;margin-bottom:0.25rem;transition:color 0.25s;" onmouseover="this.style.color='#00C896'" onmouseout="this.style.color='#FFFFFF'">
+        hello@verdant.co.za
+      </a>
+      <a href="tel:0333420180" style="font-family:'Space Grotesk',sans-serif;font-size:0.875rem;font-weight:600;color:#FFFFFF;text-decoration:none;display:block;transition:color 0.25s;" onmouseover="this.style.color='#00C896'" onmouseout="this.style.color='#FFFFFF'">
+        033 342 0180
+      </a>
     </div>
   </div>
 
-  <!-- Legal bottom bar -->
-  <div style="border-top:1px solid rgba(201,168,76,0.12);padding:1.5rem 2rem;">
-    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-      <div>
-        <p style="font-family:'Jost',sans-serif;font-size:0.68rem;color:rgba(157,184,160,0.4);margin:0 0 0.25rem;letter-spacing:0.04em;">
-          © 2026 Verdant. All rights reserved. Pietermaritzburg, KwaZulu-Natal.
-        </p>
-        <p style="font-family:'Jost',sans-serif;font-size:0.65rem;color:rgba(157,184,160,0.3);margin:0;letter-spacing:0.04em;">
-          For adults 18 and older only. Please consume responsibly. 🌿
-        </p>
-      </div>
-      <a
-        href="https://webafy.co.za"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="font-family:'Jost',sans-serif;font-size:0.68rem;color:#C9A84C;text-decoration:none;letter-spacing:0.06em;opacity:0.7;transition:opacity 0.3s ease;white-space:nowrap;"
-        onmouseover="this.style.opacity='1'"
-        onmouseout="this.style.opacity='0.7'"
-      >
+  <!-- Legal micro bar -->
+  <div style="border-top:1px solid rgba(255,255,255,0.05);padding:1.25rem 2rem;">
+    <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:0.65rem;color:rgba(139,148,158,0.45);letter-spacing:0.06em;">
+        © 2026 Verdant. For adults 18+ only. Consume responsibly.
+      </span>
+      <a href="https://webafy.co.za" target="_blank" rel="noopener noreferrer" style="font-family:'Space Grotesk',sans-serif;font-size:0.65rem;color:#00C896;text-decoration:none;letter-spacing:0.08em;opacity:0.6;transition:opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
         Website by Webafy — webafy.co.za
       </a>
     </div>
@@ -104,18 +51,12 @@
 </footer>
 
 <style>
-  @media (max-width: 900px) {
-    #footer-grid {
-      grid-template-columns: 1fr 1fr !important;
-      gap: 2.5rem !important;
-    }
-    #footer-grid > div:first-child {
-      grid-column: 1 / -1;
-    }
-  }
-  @media (max-width: 540px) {
+  @media (max-width: 768px) {
     #footer-grid {
       grid-template-columns: 1fr !important;
+      text-align: center !important;
+      gap: 1.5rem !important;
     }
+    #footer-grid > div:last-child { text-align: center !important; }
   }
 </style>

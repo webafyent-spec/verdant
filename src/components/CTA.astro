@@ -1,0 +1,83 @@
+---
+// Section 9 — Full viewport final CTA with particle canvas and ripple button
+---
+
+<section style="position:relative;min-height:100vh;background:#06080A;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden;">
+
+  <!-- Particle canvas (reused from hero) -->
+  <canvas id="cta-canvas" style="position:absolute;inset:0;z-index:0;pointer-events:none;" aria-hidden="true"></canvas>
+
+  <!-- Green glow -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,200,150,0.07) 0%,transparent 70%);pointer-events:none;" aria-hidden="true"></div>
+
+  <div style="position:relative;z-index:2;text-align:center;padding:4rem 2rem;">
+
+    <!-- Massive heading -->
+    <div data-animate style="overflow:visible;">
+      <div id="come-in-text" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,18vw,220px);font-weight:700;color:#FFFFFF;letter-spacing:-0.05em;line-height:0.85;white-space:nowrap;overflow:visible;">
+        COME IN.
+      </div>
+    </div>
+
+    <!-- Subtext -->
+    <p data-animate data-delay="1" style="font-family:'Space Grotesk',sans-serif;font-size:1rem;color:#8B949E;letter-spacing:0.02em;margin:2.5rem 0 3.5rem;line-height:1.6;">
+      18 Church Street. PMB. We are ready.
+    </p>
+
+    <!-- Ripple CTA button -->
+    <div data-animate data-delay="2">
+      <a href="#products" class="btn-ripple-wrap" id="cta-btn" role="button">
+        EXPLORE THE COLLECTION
+      </a>
+    </div>
+
+    <!-- Fine print -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:0.68rem;color:rgba(139,148,158,0.4);letter-spacing:0.1em;margin-top:2rem;text-transform:uppercase;">
+      Adults 18+ · Valid ID required · Pietermaritzburg, KZN
+    </p>
+  </div>
+</section>
+
+<script is:inline>
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+
+    /* ── PARTICLE CANVAS ── */
+    if (window.initParticleCanvas) {
+      window.initParticleCanvas('cta-canvas');
+    }
+
+    /* ── RIPPLE BUTTON ── */
+    var btn = document.getElementById('cta-btn');
+    if (btn) {
+      btn.addEventListener('click', function (e) {
+        var rect   = btn.getBoundingClientRect();
+        var circle = document.createElement('span');
+        circle.className = 'ripple-circle';
+        circle.style.left = (e.clientX - rect.left) + 'px';
+        circle.style.top  = (e.clientY - rect.top) + 'px';
+        btn.appendChild(circle);
+        setTimeout(function () { circle.remove(); }, 750);
+      });
+    }
+
+    /* ── FIT HEADING TO VIEWPORT WIDTH (optional precision) ── */
+    function fitHeading() {
+      var el = document.getElementById('come-in-text');
+      if (!el) return;
+      var vw = window.innerWidth;
+      /* Already set via clamp — just a fine-tune on large screens */
+      if (vw > 1400) {
+        var ratio = vw / (el.scrollWidth || 1);
+        if (ratio < 0.95 || ratio > 1.05) {
+          var currentSize = parseFloat(getComputedStyle(el).fontSize);
+          el.style.fontSize = Math.min(220, currentSize * ratio * 0.96) + 'px';
+        }
+      }
+    }
+    window.addEventListener('resize', fitHeading, { passive: true });
+    fitHeading();
+
+  });
+})();
+</script>

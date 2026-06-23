@@ -3,39 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import AgeGate from '../components/AgeGate.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import CategoryBar from '../components/CategoryBar.astro';
+import StrainFinder from '../components/StrainFinder.astro';
 import Products from '../components/Products.astro';
-import FeaturePanels from '../components/FeaturePanels.astro';
 import About from '../components/About.astro';
+import Marquee from '../components/Marquee.astro';
 import Education from '../components/Education.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Visit from '../components/Visit.astro';
-import CTAStrip from '../components/CTAStrip.astro';
+import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout
-  title="Verdant — The Finest. Naturally. | Cannabis Dispensary, Pietermaritzburg"
-  description="Verdant is Pietermaritzburg's first premium cannabis dispensary. Curated flower, vapes, edibles, tinctures and accessories. 18 Church Street, PMB. Open Mon–Sat 09:00–19:00. Adults 18+ only."
->
-  <!-- Age gate — renders before any content -->
+<Layout title="Verdant — Premium Cannabis. Pietermaritzburg.">
   <AgeGate />
-
-  <!-- Fixed navigation -->
   <Nav />
-
-  <!-- Page content -->
-  <main id="main-content">
+  <main>
     <Hero />
-    <CategoryBar />
+    <StrainFinder />
     <Products />
-    <FeaturePanels />
     <About />
+    <Marquee />
     <Education />
     <Testimonials />
     <Visit />
-    <CTAStrip />
+    <CTA />
   </main>
-
   <Footer />
 </Layout>

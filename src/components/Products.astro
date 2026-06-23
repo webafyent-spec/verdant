@@ -1,231 +1,181 @@
 ---
-// Section 3 — Product grid: 8 premium cannabis products
+// Section 3 — Horizontal scroll showcase with 3D mouse-tilt cards
 
 interface Product {
-  id: number;
   name: string;
-  category: 'FLOWER' | 'VAPE' | 'EDIBLE' | 'TINCTURE' | 'ACCESSORY';
-  categoryEmoji: string;
   type: string;
+  badge: string;
   notes: string;
   price: string;
-  quantity: string;
-  gradient: string;
 }
 
 const products: Product[] = [
-  {
-    id: 1,
-    name: 'Durban Poison',
-    category: 'FLOWER',
-    categoryEmoji: '🌿',
-    type: 'Sativa · Premium Outdoor',
-    notes: 'Anise, citrus, pine',
-    price: 'R180',
-    quantity: '/ 3.5g',
-    gradient: 'linear-gradient(140deg, #1B4332 0%, #0A120A 100%)',
-  },
-  {
-    id: 2,
-    name: 'Wedding Cake',
-    category: 'FLOWER',
-    categoryEmoji: '🌿',
-    type: 'Indica · Indoor Grown',
-    notes: 'Vanilla, earth, pepper',
-    price: 'R220',
-    quantity: '/ 3.5g',
-    gradient: 'linear-gradient(140deg, #2D1B47 0%, #0A080F 100%)',
-  },
-  {
-    id: 3,
-    name: 'Golden Hour',
-    category: 'VAPE',
-    categoryEmoji: '💨',
-    type: 'Live Resin · Hybrid',
-    notes: 'Tropical fruit, diesel',
-    price: 'R350',
-    quantity: '/ 1g',
-    gradient: 'linear-gradient(140deg, #3D2A0A 0%, #0F0B04 100%)',
-  },
-  {
-    id: 4,
-    name: 'Mint Condition',
-    category: 'VAPE',
-    categoryEmoji: '💨',
-    type: 'Distillate · Indica',
-    notes: 'Spearmint, cream, pine',
-    price: 'R280',
-    quantity: '/ 1g',
-    gradient: 'linear-gradient(140deg, #0A2D25 0%, #040D09 100%)',
-  },
-  {
-    id: 5,
-    name: 'Dark Forest Chocolate',
-    category: 'EDIBLE',
-    categoryEmoji: '🍫',
-    type: '72% Dark · 100mg THC',
-    notes: 'Cocoa, sea salt, cherry',
-    price: 'R120',
-    quantity: '/ bar',
-    gradient: 'linear-gradient(140deg, #2A1000 0%, #0D0500 100%)',
-  },
-  {
-    id: 6,
-    name: 'Honey Drops',
-    category: 'EDIBLE',
-    categoryEmoji: '🍫',
-    type: 'Infused Gummies · Mixed Berry',
-    notes: '25mg THC per piece · 10 pieces',
-    price: 'R150',
-    quantity: '/ pack',
-    gradient: 'linear-gradient(140deg, #2E1A00 0%, #0F0900 100%)',
-  },
-  {
-    id: 7,
-    name: 'Ember Drops',
-    category: 'TINCTURE',
-    categoryEmoji: '💧',
-    type: 'Full Spectrum CBD:THC 4:1',
-    notes: 'Sleep, calm and recovery',
-    price: 'R380',
-    quantity: '/ 30ml',
-    gradient: 'linear-gradient(140deg, #0A2030 0%, #040A10 100%)',
-  },
-  {
-    id: 8,
-    name: 'The Verdant Kit',
-    category: 'ACCESSORY',
-    categoryEmoji: '🛍️',
-    type: 'Premium Starter Set',
-    notes: 'Grinder, papers, tips, case',
-    price: 'R280',
-    quantity: '/ kit',
-    gradient: 'linear-gradient(140deg, #1B1B0A 0%, #080808 100%)',
-  },
+  { name: 'DURBAN POISON',   type: 'Sativa Flower',          badge: 'FLOWER',    notes: 'Anise · Citrus · Pine',       price: 'R180' },
+  { name: 'WEDDING CAKE',    type: 'Indica Flower',           badge: 'FLOWER',    notes: 'Vanilla · Earth · Pepper',    price: 'R220' },
+  { name: 'GOLDEN HOUR',     type: 'Hybrid Live Resin Vape',  badge: 'VAPE',      notes: 'Tropical · Diesel · Sweet',   price: 'R350' },
+  { name: 'MINT CONDITION',  type: 'Indica Distillate Vape',  badge: 'VAPE',      notes: 'Spearmint · Cream · Pine',    price: 'R280' },
+  { name: 'DARK FOREST',     type: '100mg THC Chocolate',     badge: 'EDIBLE',    notes: 'Cocoa · Sea Salt · Cherry',   price: 'R120' },
+  { name: 'HONEY DROPS',     type: 'Mixed Berry Gummies',     badge: 'EDIBLE',    notes: 'Berry · Citrus · Sweet',      price: 'R150' },
+  { name: 'EMBER DROPS',     type: 'CBD:THC 4:1 Tincture',   badge: 'TINCTURE',  notes: 'Earthy · Herbal · Clean',     price: 'R380' },
+  { name: 'THE VERDANT KIT', type: 'Premium Starter Pack',   badge: 'ACCESSORY', notes: 'Grinder · Papers · Case',     price: 'R280' },
 ];
 ---
 
-<section id="products" class="grain" style="background-color:#0D140D;padding:7rem 0 5rem;">
+<section id="products" class="h-scroll-section">
+  <div class="h-scroll-pin">
 
-  <!-- Section header -->
-  <div style="text-align:center;padding:0 2rem;margin-bottom:3.5rem;" data-animate>
-    <p class="gold-label" style="margin-bottom:1.25rem;">The Collection</p>
-    <h2 class="gold-underline" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.25rem,5vw,3.75rem);font-style:italic;font-weight:400;color:#F5F0E8;margin:0 auto 0;line-height:1.1;">
-      Curated for the Connoisseur
-    </h2>
-    <p style="font-family:'Jost',sans-serif;color:#9DB8A0;font-size:0.92rem;line-height:1.75;max-width:540px;margin:2rem auto 0;">
-      Every product on our shelves has been personally selected by our team.<br />Nothing mediocre. Nothing mass-produced.
-    </p>
-  </div>
+    <!-- Section header -->
+    <div id="products-header" style="padding:2.5rem 5vw 1.5rem;display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;">
+      <div id="collection-heading" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,9vw,120px);font-weight:700;color:#FFFFFF;letter-spacing:-0.04em;line-height:0.9;white-space:nowrap;overflow:visible;">
+        THE COLLECTION
+      </div>
+      <div style="text-align:right;flex-shrink:0;padding-left:2rem;">
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#8B949E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">8 products</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#00C896;letter-spacing:0.1em;">DRAG OR SCROLL ↓</p>
+      </div>
+    </div>
 
-  <!-- Product grid -->
-  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;" id="product-grid">
-    {products.map((p, i) => (
-      <div
-        class="product-card-wrap"
-        data-category={p.category}
-        data-animate
-        data-delay={String(Math.min(i + 1, 8))}
-      >
-        <article class="product-card" aria-label={`${p.name} — ${p.type}`}>
+    <!-- Progress bar -->
+    <div class="h-progress" style="flex-shrink:0;margin:0 5vw;">
+      <div class="h-progress-fill" id="h-progress-fill"></div>
+    </div>
 
-          <!-- Category badge -->
-          <div style="margin-bottom:1rem;">
-            <span style={`
-              font-family:'Jost',sans-serif;
-              font-size:0.6rem;
-              font-weight:600;
-              letter-spacing:0.14em;
-              text-transform:uppercase;
-              color:#080C08;
-              background:#C9A84C;
-              padding:3px 10px;
-              border-radius:99px;
-              display:inline-block;
-            `}>{p.categoryEmoji} {p.category}</span>
-          </div>
+    <!-- Cards track -->
+    <div id="h-scroll-track" class="h-scroll-track" style="flex:1;align-items:center;">
+      {products.map((p, i) => (
+        <article class="product-card-3d" data-index={i} aria-label={p.name}>
 
-          <!-- Product image / visual area -->
-          <div class="product-image-area" style={`background:${p.gradient};`}>
-            <!-- Botanical leaf watermark -->
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.07;" aria-hidden="true">
-              <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="90" height="120">
-                <g stroke="#C9A84C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M60 155 C60 155 58 133 60 115"/>
-                  <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
-                  <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
-                  <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
-                  <path d="M53 108 C43 102 26 104 12 101 C22 106 36 108 50 110Z"/>
-                  <path d="M67 108 C77 102 94 104 108 101 C98 106 84 108 70 110Z"/>
-                </g>
-              </svg>
-            </div>
-            <!-- Product name centered -->
-            <div style="position:relative;z-index:2;text-align:center;padding:0 1rem;">
-              <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.375rem;font-style:italic;font-weight:500;color:#C9A84C;display:block;line-height:1.2;">
-                {p.name}
-              </span>
-            </div>
-          </div>
+          <!-- Glow shimmer layer (follows mouse) -->
+          <div class="card-shimmer" style="position:absolute;inset:0;pointer-events:none;border-radius:inherit;"></div>
 
-          <!-- Product details -->
-          <div style="flex:1;margin-top:0.25rem;">
-            <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-style:italic;font-weight:500;color:#F5F0E8;margin:0 0 4px;line-height:1.2;">
+          <!-- Top section -->
+          <div>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:0.58rem;font-weight:700;letter-spacing:0.14em;color:#06080A;background:#00C896;padding:3px 10px;text-transform:uppercase;display:inline-block;margin-bottom:1.25rem;">
+              {p.badge}
+            </span>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.4rem;">
               {p.name}
             </h3>
-            <p style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#74C69D;letter-spacing:0.06em;margin:0 0 6px;text-transform:uppercase;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-size:0.75rem;color:#8B949E;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.5rem;">
               {p.type}
             </p>
-            <p style="font-family:'Jost',sans-serif;font-size:0.75rem;font-style:italic;color:#9DB8A0;margin:0 0 14px;line-height:1.5;">
-              Notes of {p.notes}
+            <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:rgba(139,148,158,0.6);font-style:italic;">
+              {p.notes}
             </p>
-
-            <!-- Price -->
-            <div style="display:flex;align-items:baseline;gap:0.25rem;margin-bottom:0;">
-              <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.625rem;font-weight:600;color:#C9A84C;line-height:1;">
-                {p.price}
-              </span>
-              <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#74C69D;letter-spacing:0.06em;">
-                {p.quantity}
-              </span>
-            </div>
           </div>
 
-          <!-- CTA -->
-          <button class="add-to-bag-btn" type="button" aria-label={`Add ${p.name} to bag`}>
-            Add to Bag
-          </button>
+          <!-- Decorative leaf watermark -->
+          <div style="position:absolute;bottom:60px;right:16px;opacity:0.05;" aria-hidden="true">
+            <svg viewBox="0 0 120 160" width="90" height="120" fill="none">
+              <g stroke="#00C896" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M60 155 C60 155 58 133 60 115"/>
+                <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
+                <path d="M56 100 C48 92 32 86 18 80 C27 86 40 92 52 100Z"/>
+                <path d="M64 100 C72 92 88 86 102 80 C93 86 80 92 68 100Z"/>
+              </g>
+            </svg>
+          </div>
 
+          <!-- Bottom section -->
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:0.65rem;color:#8B949E;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.2rem;">FROM</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:#00C896;letter-spacing:-0.03em;line-height:1;">
+                {p.price}
+              </div>
+            </div>
+            <div class="card-cta" style="font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:700;color:#FFFFFF;letter-spacing:0.06em;display:flex;align-items:center;gap:0.4rem;transition:color 0.25s,gap 0.25s;">
+              ADD <span style="transition:transform 0.25s;">→</span>
+            </div>
+          </div>
         </article>
-      </div>
-    ))}
-  </div>
-
-  <!-- View all CTA -->
-  <div style="text-align:center;margin-top:3.5rem;padding:0 2rem;" data-animate>
-    <a href="#" class="btn-outline" style="display:inline-flex;align-items:center;gap:0.5rem;">
-      View Full Collection
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
-    </a>
+      ))}
+    </div>
   </div>
 </section>
 
-<style>
-  @media (max-width: 1100px) {
-    #product-grid {
-      grid-template-columns: repeat(3, 1fr) !important;
+<script is:inline>
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+
+    var section  = document.querySelector('.h-scroll-section');
+    var track    = document.getElementById('h-scroll-track');
+    var fill     = document.getElementById('h-progress-fill');
+    var isMobile = window.innerWidth < 768;
+
+    /* ── HORIZONTAL SCROLL (desktop only) ── */
+    if (!isMobile && section && track) {
+      function updateHScroll() {
+        var sectionTop  = section.offsetTop;
+        var sectionH    = section.offsetHeight;
+        var winH        = window.innerHeight;
+        var scrolled    = window.scrollY - sectionTop;
+        var maxScroll   = sectionH - winH;
+        var progress    = Math.max(0, Math.min(1, scrolled / maxScroll));
+        var maxTranslate = track.scrollWidth - window.innerWidth;
+        var translateX  = progress * maxTranslate;
+
+        track.style.transform = 'translateX(-' + translateX + 'px)';
+        if (fill) fill.style.width = (progress * 100) + '%';
+      }
+
+      window.addEventListener('scroll', updateHScroll, { passive: true });
+      updateHScroll();
     }
-  }
-  @media (max-width: 768px) {
-    #product-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
+
+    /* ── 3D MOUSE TILT (desktop only) ── */
+    if (!isMobile) {
+      document.querySelectorAll('.product-card-3d').forEach(function (card) {
+        var ticking = false;
+
+        card.addEventListener('mousemove', function (e) {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () {
+            var rect    = card.getBoundingClientRect();
+            var cx      = rect.left + rect.width / 2;
+            var cy      = rect.top  + rect.height / 2;
+            var dx      = (e.clientX - cx) / (rect.width / 2);
+            var dy      = (e.clientY - cy) / (rect.height / 2);
+            var rotY    =  dx * 14;
+            var rotX    = -dy * 10;
+
+            card.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease';
+            card.style.transform  = 'perspective(1000px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) scale(1.02)';
+            card.style.boxShadow  = '0 20px 50px rgba(0,200,150,0.1), 0 0 0 1px rgba(0,200,150,0.3)';
+
+            /* shimmer follows mouse */
+            var pctX = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+            var pctY = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+            card.style.setProperty('--mx', pctX + '%');
+            card.style.setProperty('--my', pctY + '%');
+
+            ticking = false;
+          });
+        });
+
+        card.addEventListener('mouseleave', function () {
+          card.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+          card.style.transform  = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+          card.style.boxShadow  = '';
+        });
+
+        /* Card CTA arrow on hover */
+        var cta = card.querySelector('.card-cta');
+        if (cta) {
+          var arrow = cta.querySelector('span');
+          card.addEventListener('mouseenter', function () {
+            if (cta) cta.style.color = '#00C896';
+            if (arrow) arrow.style.transform = 'translateX(4px)';
+          });
+          card.addEventListener('mouseleave', function () {
+            if (cta) cta.style.color = '#FFFFFF';
+            if (arrow) arrow.style.transform = 'translateX(0)';
+          });
+        }
+      });
     }
-  }
-  @media (max-width: 480px) {
-    #product-grid {
-      grid-template-columns: 1fr !important;
-    }
-  }
-</style>
+
+  });
+})();
+</script>
