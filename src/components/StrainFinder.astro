@@ -1,20 +1,5 @@
 ---
-// Section 2 — Strain Finder: 3-step quiz with product recommendation logic
-
-interface Product {
-  name: string;
-  type: string;
-  desc: string;
-  price: string;
-}
-
-const products: Record<string, Product> = {
-  'EMBER DROPS':     { name: 'EMBER DROPS',            type: 'Full Spectrum CBD:THC 4:1', desc: 'Perfect for first-timers seeking calm without intensity. Sub-lingual tincture, precise dosing, gentle onset.', price: 'R380 / 30ml' },
-  'WEDDING CAKE':    { name: 'WEDDING CAKE',            type: 'Indica Flower',             desc: 'A deeply relaxing cultivar with vanilla and earth notes. Body-forward, ideal for evenings and recovery.', price: 'R220 / 3.5g' },
-  'DURBAN POISON':   { name: 'DURBAN POISON',           type: 'Sativa Flower',             desc: 'South Africa\'s legendary landrace sativa. Uplifting, clear-headed, creative energy. The classic choice.', price: 'R180 / 3.5g' },
-  'GOLDEN HOUR':     { name: 'GOLDEN HOUR',             type: 'Hybrid Live Resin Vape',    desc: 'Premium live resin hybrid for creative minds. Tropical fruit notes, balanced mind and body experience.', price: 'R350 / 1g' },
-  'DARK FOREST':     { name: 'DARK FOREST CHOCOLATE',  type: '72% Dark · 100mg THC',      desc: 'Artisan 72% dark chocolate, 100mg THC. Slow burn, long lasting. The connoisseur\'s edible.', price: 'R120 / bar' },
-};
+// Section 2 — Strain Finder: 3-step quiz, scoring-based, up to 3 results
 ---
 
 <section id="strains" style="background:#0D1117;padding:8rem 0;">
@@ -25,11 +10,11 @@ const products: Record<string, Product> = {
       <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#FFFFFF;letter-spacing:-0.04em;line-height:0.9;">
         FIND YOUR
       </div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#00C896;letter-spacing:-0.04em;line-height:0.9;margin-bottom:1.5rem;">
+      <div class="text-glow-green" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#00C896;letter-spacing:-0.04em;line-height:0.9;margin-bottom:1.5rem;">
         STRAIN.
       </div>
       <p style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;color:#8B949E;letter-spacing:0.02em;">
-        Answer 3 questions. We recommend your perfect product.
+        Answer 3 questions. We match you with up to 3 products.
       </p>
     </div>
 
@@ -63,23 +48,11 @@ const products: Record<string, Product> = {
       </div>
     </div>
 
-    <!-- Result -->
+    <!-- Results -->
     <div class="result-card-wrap" id="quiz-result" style="margin-top:2.5rem;">
-      <div style="border:1.5px solid #00C896;background:rgba(0,200,150,0.04);padding:2.5rem;position:relative;box-shadow:0 0 40px rgba(0,200,150,0.12);">
-        <!-- Green glow corner -->
-        <div style="position:absolute;top:-1px;left:-1px;width:48px;height:48px;border-top:2px solid #00C896;border-left:2px solid #00C896;"></div>
-        <div style="position:absolute;bottom:-1px;right:-1px;width:48px;height:48px;border-bottom:2px solid #00C896;border-right:2px solid #00C896;"></div>
-
-        <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.16em;color:#00C896;text-transform:uppercase;margin-bottom:1rem;">OUR RECOMMENDATION</p>
-        <div id="result-name" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;line-height:1;margin-bottom:0.5rem;"></div>
-        <div id="result-type" style="font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;color:#00C896;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;"></div>
-        <p id="result-desc" style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;color:#8B949E;line-height:1.7;margin-bottom:1.5rem;max-width:500px;"></p>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-          <div id="result-price" style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:#00C896;letter-spacing:-0.02em;"></div>
-          <a href="#products" style="font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:700;color:#00C896;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;">VIEW PRODUCT →</a>
-        </div>
-      </div>
-      <button id="quiz-reset" type="button" style="font-family:'Space Grotesk',sans-serif;font-size:0.78rem;font-weight:600;color:#8B949E;background:none;border:none;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;margin-top:1.25rem;padding:0;transition:color 0.25s;">
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.16em;color:#00C896;text-transform:uppercase;margin-bottom:1.25rem;" id="results-label">OUR RECOMMENDATION</p>
+      <div id="results-grid"></div>
+      <button id="quiz-reset" type="button" style="font-family:'Space Grotesk',sans-serif;font-size:0.78rem;font-weight:600;color:#8B949E;background:none;border:none;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;margin-top:1.5rem;padding:0;transition:color 0.25s;">
         ← START AGAIN
       </button>
     </div>
@@ -92,50 +65,228 @@ const products: Record<string, Product> = {
 
     var answers = { feel: '', experience: '', level: '' };
 
-    /* Product map */
-    var products = {
-      'EMBER DROPS':   { name: 'EMBER DROPS',           type: 'Full Spectrum CBD:THC 4:1', desc: 'Perfect for first-timers seeking calm without intensity. Sub-lingual tincture, precise dosing, gentle onset.', price: 'R380 / 30ml' },
-      'WEDDING CAKE':  { name: 'WEDDING CAKE',           type: 'Indica Flower',             desc: 'A deeply relaxing cultivar with vanilla and earth notes. Body-forward, ideal for evenings and recovery.', price: 'R220 / 3.5g' },
-      'DURBAN POISON': { name: 'DURBAN POISON',          type: 'Sativa Flower',             desc: "South Africa's legendary landrace sativa. Uplifting, clear-headed, creative energy. The classic choice.", price: 'R180 / 3.5g' },
-      'GOLDEN HOUR':   { name: 'GOLDEN HOUR',            type: 'Hybrid Live Resin Vape',    desc: 'Premium live resin hybrid for creative minds. Tropical fruit notes, balanced mind and body experience.', price: 'R350 / 1g' },
-      'DARK FOREST':   { name: 'DARK FOREST CHOCOLATE', type: '72% Dark · 100mg THC',      desc: "Artisan 72% dark chocolate, 100mg THC. Slow burn, long lasting. The connoisseur's edible.", price: 'R120 / bar' },
-    };
+    /* ── FULL PRODUCT CATALOG ── */
+    var catalog = [
+      {
+        key: 'EMBER DROPS',
+        name: 'EMBER DROPS',
+        type: 'Full Spectrum CBD:THC 4:1',
+        desc: 'Perfect for first-timers seeking calm without intensity. Sub-lingual tincture, precise dosing, gentle onset. No high — just ease.',
+        price: 'R380 / 30ml',
+        feels: ['RELAXED','SLEEPY'],
+        experiences: ['MIND'],
+        levels: ['FIRST TIME','OCCASIONAL'],
+      },
+      {
+        key: 'WEDDING CAKE',
+        name: 'WEDDING CAKE',
+        type: 'Indica Flower',
+        desc: 'A deeply relaxing cultivar with vanilla and earth notes. Body-forward, ideal for evenings, recovery, and winding down completely.',
+        price: 'R220 / 3.5g',
+        feels: ['RELAXED','SLEEPY'],
+        experiences: ['BODY','BOTH'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'DURBAN POISON',
+        name: 'DURBAN POISON',
+        type: 'Sativa Flower',
+        desc: "South Africa's legendary landrace sativa. Uplifting, clear-headed, creative energy with no ceiling. The classic choice.",
+        price: 'R180 / 3.5g',
+        feels: ['CREATIVE','ENERGISED'],
+        experiences: ['MIND'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'GOLDEN HOUR',
+        name: 'GOLDEN HOUR',
+        type: 'Hybrid Live Resin Vape',
+        desc: 'Premium live resin hybrid for creative minds. Tropical fruit notes, balanced mind and body experience with smooth draw.',
+        price: 'R350 / 1g',
+        feels: ['CREATIVE','ENERGISED'],
+        experiences: ['BODY','BOTH'],
+        levels: ['FIRST TIME','OCCASIONAL'],
+      },
+      {
+        key: 'DARK FOREST',
+        name: 'DARK FOREST CHOCOLATE',
+        type: '72% Dark · 100mg THC',
+        desc: "Artisan 72% dark chocolate, 100mg THC. Slow burn, long lasting, deeply sedative. The connoisseur's edible — not for the faint-hearted.",
+        price: 'R120 / bar',
+        feels: ['RELAXED','SLEEPY','CREATIVE'],
+        experiences: ['BODY','BOTH'],
+        levels: ['SEASONED'],
+      },
+      {
+        key: 'OG KUSH',
+        name: 'OG KUSH',
+        type: 'Hybrid Flower',
+        desc: 'The benchmark hybrid. Earthy pine and fuel aroma. Balanced euphoria with full-body relaxation — cerebral without the anxiety.',
+        price: 'R200 / 3.5g',
+        feels: ['RELAXED','CREATIVE'],
+        experiences: ['BOTH'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'GELATO',
+        name: 'GELATO',
+        type: 'Hybrid Flower',
+        desc: 'Creamy, dessert-sweet hybrid. A burst of mental uplift softens into deep physical ease. Exceptional for unwinding while staying present.',
+        price: 'R240 / 3.5g',
+        feels: ['CREATIVE','ENERGISED'],
+        experiences: ['BOTH'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'BLUE DREAM',
+        name: 'BLUE DREAM',
+        type: 'Sativa-Dominant Hybrid',
+        desc: 'Berry and haze. A clear, motivating head high with a gentle body softness underneath. Built for long, productive, creative sessions.',
+        price: 'R190 / 3.5g',
+        feels: ['CREATIVE','ENERGISED'],
+        experiences: ['MIND','BOTH'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'PMB PURPLE',
+        name: 'PMB PURPLE',
+        type: 'Indica Flower · Local Grow',
+        desc: 'KZN-grown, deep purple indica. Grape and berry notes. Heavy body sedation with a calm mental clarity — our proudest local cultivar.',
+        price: 'R160 / 3.5g',
+        feels: ['SLEEPY','RELAXED'],
+        experiences: ['BODY'],
+        levels: ['FIRST TIME','OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'SUNSET SHERBET',
+        name: 'SUNSET SHERBET',
+        type: 'Indica-Dominant Hybrid',
+        desc: 'Sweet citrus and berry with an indica backbone. Uplifts the mood before melting into full relaxation. The perfect Friday evening strain.',
+        price: 'R210 / 3.5g',
+        feels: ['RELAXED','CREATIVE'],
+        experiences: ['BOTH'],
+        levels: ['OCCASIONAL','SEASONED'],
+      },
+      {
+        key: 'CRITICAL CURE',
+        name: 'CRITICAL CURE',
+        type: 'CBD-Rich Flower · 1:1',
+        desc: 'High-CBD indica with a balanced 1:1 CBD:THC ratio. A therapeutic option that delivers real relief with a soft, manageable effect.',
+        price: 'R170 / 3.5g',
+        feels: ['RELAXED','SLEEPY'],
+        experiences: ['BODY','MIND'],
+        levels: ['FIRST TIME','OCCASIONAL'],
+      },
+    ];
 
-    function getRecommendation() {
-      var f = answers.feel, e = answers.experience, l = answers.level;
-      if (f === 'RELAXED'   && e === 'MIND' && l === 'FIRST TIME') return 'EMBER DROPS';
-      if (f === 'RELAXED')                                           return 'WEDDING CAKE';
-      if (f === 'CREATIVE'  && e === 'MIND')                        return 'DURBAN POISON';
-      if (f === 'CREATIVE')                                          return 'GOLDEN HOUR';
-      if (f === 'ENERGISED')                                         return 'DURBAN POISON';
-      if (f === 'SLEEPY')                                            return 'WEDDING CAKE';
-      return 'DARK FOREST';
+    /* ── SCORING ── */
+    /* feel match = 3pts (highest weight), experience = 2pts, level = 1pt */
+    function score(product, feel, experience, level) {
+      var s = 0;
+      if (product.feels.indexOf(feel) !== -1)             s += 3;
+      if (product.experiences.indexOf(experience) !== -1) s += 2;
+      if (product.levels.indexOf(level) !== -1)           s += 1;
+      return s;
     }
 
+    function getRecommendations() {
+      var f = answers.feel, e = answers.experience, l = answers.level;
+      var scored = catalog.map(function (p) {
+        return { product: p, score: score(p, f, e, l) };
+      });
+      /* Must match feel (score >= 3), sort descending, take top 3 */
+      scored = scored.filter(function (s) { return s.score >= 3; });
+      scored.sort(function (a, b) { return b.score - a.score; });
+      return scored.slice(0, 3).map(function (s) { return s.product; });
+    }
+
+    /* ── RENDER RESULT CARDS ── */
+    var rankLabels = ['BEST MATCH', 'ALSO CONSIDER', 'OR TRY'];
+
+    function buildCard(product, rank) {
+      var card = document.createElement('div');
+      card.className = 'result-card';
+
+      /* Corner accents */
+      var tl = document.createElement('div');
+      tl.style.cssText = 'position:absolute;top:-1px;left:-1px;width:40px;height:40px;border-top:2px solid #00C896;border-left:2px solid #00C896;';
+      var br = document.createElement('div');
+      br.style.cssText = 'position:absolute;bottom:-1px;right:-1px;width:40px;height:40px;border-bottom:2px solid #00C896;border-right:2px solid #00C896;';
+      card.appendChild(tl);
+      card.appendChild(br);
+
+      /* Rank chip */
+      var rankEl = document.createElement('p');
+      rankEl.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;color:" + (rank === 0 ? '#00C896' : 'rgba(0,200,150,0.5)') + ";text-transform:uppercase;margin-bottom:0.75rem;";
+      rankEl.textContent = rankLabels[rank];
+      card.appendChild(rankEl);
+
+      /* Product name */
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:700;color:#FFFFFF;letter-spacing:-0.03em;line-height:1;margin-bottom:0.4rem;";
+      nameEl.textContent = product.name;
+      card.appendChild(nameEl);
+
+      /* Type */
+      var typeEl = document.createElement('div');
+      typeEl.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:0.8rem;font-weight:600;color:#00C896;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;";
+      typeEl.textContent = product.type;
+      card.appendChild(typeEl);
+
+      /* Desc */
+      var descEl = document.createElement('p');
+      descEl.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:0.9rem;color:#8B949E;line-height:1.7;margin-bottom:1.5rem;max-width:520px;";
+      descEl.textContent = product.desc;
+      card.appendChild(descEl);
+
+      /* Price + link row */
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;';
+
+      var priceEl = document.createElement('div');
+      priceEl.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:1.375rem;font-weight:700;color:#00C896;letter-spacing:-0.02em;";
+      priceEl.textContent = product.price;
+
+      var link = document.createElement('a');
+      link.href = '#products';
+      link.style.cssText = "font-family:'Space Grotesk',sans-serif;font-size:0.8rem;font-weight:700;color:#00C896;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;";
+      link.textContent = 'VIEW PRODUCT →';
+
+      row.appendChild(priceEl);
+      row.appendChild(link);
+      card.appendChild(row);
+
+      return card;
+    }
+
+    function showResults() {
+      var picks = getRecommendations();
+      var grid  = document.getElementById('results-grid');
+      var label = document.getElementById('results-label');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      picks.forEach(function (product, i) {
+        grid.appendChild(buildCard(product, i));
+      });
+
+      if (label) label.textContent = picks.length > 1 ? 'YOUR MATCHES' : 'OUR RECOMMENDATION';
+      document.getElementById('quiz-result').classList.add('visible');
+    }
+
+    /* ── STEP REVEAL ── */
     function showStep(id) {
       var el = document.getElementById(id);
       if (el) el.classList.add('visible');
     }
 
-    function showResult() {
-      var key = getRecommendation();
-      var p   = products[key];
-      if (!p) return;
-      document.getElementById('result-name').textContent  = p.name;
-      document.getElementById('result-type').textContent  = p.type;
-      document.getElementById('result-desc').textContent  = p.desc;
-      document.getElementById('result-price').textContent = p.price;
-      document.getElementById('quiz-result').classList.add('visible');
-    }
-
+    /* ── TILE CLICKS ── */
     document.querySelectorAll('.quiz-tile').forEach(function (tile) {
       tile.addEventListener('click', function () {
         var step = this.dataset.step;
         var val  = this.dataset.val;
 
-        /* Deselect siblings */
-        var parent = this.parentElement;
-        parent.querySelectorAll('.quiz-tile').forEach(function (t) { t.classList.remove('selected'); });
+        this.parentElement.querySelectorAll('.quiz-tile').forEach(function (t) { t.classList.remove('selected'); });
         this.classList.add('selected');
 
         if (step === '1') {
@@ -146,12 +297,12 @@ const products: Record<string, Product> = {
           showStep('step-3');
         } else if (step === '3') {
           answers.level = val;
-          setTimeout(showResult, 200);
+          setTimeout(showResults, 200);
         }
       });
     });
 
-    /* Reset */
+    /* ── RESET ── */
     var resetBtn = document.getElementById('quiz-reset');
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
@@ -160,6 +311,7 @@ const products: Record<string, Product> = {
         document.getElementById('step-2').classList.remove('visible');
         document.getElementById('step-3').classList.remove('visible');
         document.getElementById('quiz-result').classList.remove('visible');
+        document.getElementById('results-grid').innerHTML = '';
       });
     }
 

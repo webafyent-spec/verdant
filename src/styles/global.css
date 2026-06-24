@@ -118,6 +118,12 @@ body {
   50%       { opacity: 0; }
 }
 
+/* Result card border pulse */
+@keyframes border-pulse {
+  0%, 100% { border-color: #00C896; }
+  50%       { border-color: rgba(0,200,150,0.12); }
+}
+
 /* Mobile menu link slide */
 @keyframes mob-link-in {
   from { opacity: 0; transform: translateX(-50px); }
@@ -384,15 +390,39 @@ body {
   color: #06080A;
 }
 
+/* Green text-shadow glow utility */
+.text-glow-green {
+  text-shadow: 0 0 40px rgba(0,200,150,0.5);
+}
+
 .result-card-wrap {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  transition: max-height 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
   opacity: 0;
 }
 .result-card-wrap.visible {
-  max-height: 500px;
+  max-height: 1600px;
   opacity: 1;
+}
+
+/* Individual result card */
+.result-card {
+  border: 1.5px solid #00C896;
+  background: rgba(0,200,150,0.04);
+  padding: 2.5rem;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,200,150,0.3), 0 0 80px rgba(0,200,150,0.1);
+  animation: border-pulse 2s ease-in-out infinite;
+}
+.result-card + .result-card {
+  margin-top: 1rem;
+  box-shadow: 0 0 20px rgba(0,200,150,0.15), 0 0 50px rgba(0,200,150,0.06);
+  animation-delay: 0.4s;
+}
+.result-card + .result-card + .result-card {
+  box-shadow: 0 0 12px rgba(0,200,150,0.1), 0 0 30px rgba(0,200,150,0.04);
+  animation-delay: 0.8s;
 }
 
 /* ============================================================
