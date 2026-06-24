@@ -452,20 +452,25 @@ body {
 /* 3D tilt product card */
 .product-card-3d {
   flex: 0 0 300px;
-  height: 360px;
+  height: 480px;
   background: #0D1117;
   border: 1px solid rgba(0, 200, 150, 0.18);
   border-top: 2px solid #00C896;
-  padding: 1.5rem;
+  padding: 0 0 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
   will-change: transform;
   transform-style: preserve-3d;
   transition: transform 0.5s ease, box-shadow 0.5s ease;
   cursor: default;
+}
+
+/* Image zoom on card hover */
+.product-card-3d:hover .card-img {
+  transform: scale(1.06);
 }
 .product-card-3d::before {
   content: '';
@@ -726,7 +731,7 @@ body {
     padding: 1rem;
     gap: 1rem;
   }
-  .product-card-3d { flex: 0 0 calc(50% - 0.5rem); height: 280px; }
+  .product-card-3d { flex: 0 0 calc(50% - 0.5rem); height: 420px; }
 
   /* About → single column */
   .about-container { flex-direction: column; }
