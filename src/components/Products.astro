@@ -131,7 +131,6 @@ const products: Product[] = [
 <style>
   @media (max-width: 767px) {
     #products-meta { text-align: left !important; padding-left: 0 !important; }
-    #products-scroll-hint { display: none !important; }
   }
 </style>
 
@@ -160,20 +159,32 @@ const products: Product[] = [
       if (fill) fill.style.width = (progress * 100) + '%';
     }
 
+    /* ── PROGRESS BAR from the track's own native scroll (mobile touch-swipe) ── */
+    function updateTouchProgress() {
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      var progress  = maxScroll > 0 ? Math.max(0, Math.min(1, track.scrollLeft / maxScroll)) : 0;
+      if (fill) fill.style.width = (progress * 100) + '%';
+    }
+
     function syncScrollMode() {
       if (!section || !track) return;
       if (mq.matches) {
-        /* Mobile: hand back to normal vertical flow, clear any leftover transform */
+        /* Mobile: no scroll-jacking — track scrolls natively via touch swipe */
         if (bound) {
           window.removeEventListener('scroll', updateHScroll);
           bound = false;
         }
         track.style.transform = '';
-        if (fill) fill.style.width = '0%';
-      } else if (!bound) {
-        window.addEventListener('scroll', updateHScroll, { passive: true });
-        bound = true;
-        updateHScroll();
+        track.addEventListener('scroll', updateTouchProgress, { passive: true });
+        updateTouchProgress();
+      } else {
+        track.removeEventListener('scroll', updateTouchProgress);
+        track.scrollLeft = 0;
+        if (!bound) {
+          window.addEventListener('scroll', updateHScroll, { passive: true });
+          bound = true;
+          updateHScroll();
+        }
       }
     }
 
