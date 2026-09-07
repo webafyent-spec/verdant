@@ -10,11 +10,11 @@
   <!-- Green glow -->
   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,200,150,0.07) 0%,transparent 70%);pointer-events:none;" aria-hidden="true"></div>
 
-  <div style="position:relative;z-index:2;text-align:center;padding:4rem 2rem;">
+  <div id="cta-content" style="position:relative;z-index:2;text-align:center;padding:4rem 2rem;">
 
     <!-- Massive heading -->
     <div data-animate style="overflow:visible;">
-      <div id="come-in-text" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,18vw,220px);font-weight:700;color:#FFFFFF;letter-spacing:-0.05em;line-height:0.85;white-space:nowrap;overflow:visible;">
+      <div id="come-in-text" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(52px,18vw,220px);font-weight:700;color:#FFFFFF;letter-spacing:-0.05em;line-height:0.85;white-space:nowrap;overflow:visible;">
         COME IN.
       </div>
     </div>
@@ -37,6 +37,13 @@
     </p>
   </div>
 </section>
+
+<style>
+  @media (max-width: 380px) {
+    #cta-content { padding-left: 12px !important; padding-right: 12px !important; }
+    #come-in-text { font-size: clamp(40px, 17vw, 220px) !important; }
+  }
+</style>
 
 <script is:inline>
 (function () {

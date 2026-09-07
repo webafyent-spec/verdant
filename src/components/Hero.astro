@@ -8,7 +8,7 @@
   <canvas id="hero-canvas" style="position:absolute;inset:0;z-index:0;pointer-events:none;" aria-hidden="true"></canvas>
 
   <!-- Hero content — hard left aligned -->
-  <div style="position:relative;z-index:2;padding:8rem 0 6rem 60px;max-width:100%;">
+  <div class="hero-content" style="position:relative;z-index:2;padding:8rem 24px 6rem 60px;max-width:100%;">
 
     <!-- Location label -->
     <div class="hero-line" style="display:flex;align-items:center;gap:1rem;margin-bottom:2rem;">
@@ -18,13 +18,13 @@
 
     <!-- Main stacked type -->
     <h1 style="margin:0;padding:0;line-height:0.88;">
-      <span class="hero-line" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,13vw,160px);font-weight:700;color:#FFFFFF;letter-spacing:-0.04em;">
+      <span class="hero-line" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(44px,13vw,160px);font-weight:700;color:#FFFFFF;letter-spacing:-0.04em;">
         THE
       </span>
-      <span class="hero-line text-glow-green" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(100px,16vw,200px);font-weight:700;color:#00C896;letter-spacing:-0.04em;display:block;overflow:visible;">
+      <span class="hero-line text-glow-green" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(52px,16vw,200px);font-weight:700;color:#00C896;letter-spacing:-0.04em;display:block;overflow:visible;">
         FINEST.
       </span>
-      <span class="hero-line text-outline-white" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,13vw,160px);font-weight:700;letter-spacing:-0.04em;display:block;">
+      <span class="hero-line text-outline-white" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(44px,13vw,160px);font-weight:700;letter-spacing:-0.04em;display:block;">
         NATURALLY.
       </span>
     </h1>
@@ -83,6 +83,15 @@
   <!-- Bottom gradient fade -->
   <div style="position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top, #06080A, transparent);z-index:1;" aria-hidden="true"></div>
 </section>
+
+<style>
+  @media (max-width: 480px) {
+    .hero-content { padding-left: 20px !important; padding-right: 16px !important; }
+  }
+  @media (max-width: 767px) {
+    #rotating-widget { display: none !important; }
+  }
+</style>
 
 <script is:inline>
 (function () {
