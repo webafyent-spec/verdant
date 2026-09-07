@@ -108,6 +108,16 @@ body {
   to   { transform: translateX(0); }
 }
 
+/* True rotation — for the hero's circular text ring / center leaf */
+@keyframes spin-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spin-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
 /* Slide in from right (tabs) */
 @keyframes slide-in-right {
   from { opacity: 0; transform: translateX(40px); }

@@ -56,7 +56,7 @@
   <!-- RIGHT — rotating cannabis leaf + circular text -->
   <div id="rotating-widget" style="position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;z-index:2;" aria-hidden="true">
     <!-- Outer rotating circular text -->
-    <svg id="circular-text-svg" viewBox="0 0 260 260" width="260" height="260" style="position:absolute;animation:marquee-left 20s linear infinite;">
+    <svg id="circular-text-svg" viewBox="0 0 260 260" width="260" height="260" style="position:absolute;transform-origin:130px 130px;animation:spin-cw 20s linear infinite;">
       <defs>
         <path id="circ" d="M 130,130 m -108,0 a 108,108 0 1,1 216,0 a 108,108 0 1,1 -216,0"/>
       </defs>
@@ -66,7 +66,7 @@
     </svg>
 
     <!-- Inner rotating cannabis leaf -->
-    <svg id="center-leaf" viewBox="0 0 120 160" width="80" height="107" fill="none" style="animation:marquee-left 20s linear infinite reverse;">
+    <svg id="center-leaf" viewBox="0 0 120 160" width="80" height="107" fill="none" style="animation:spin-ccw 20s linear infinite;">
       <g stroke="#00C896" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M60 155 C60 155 58 133 60 115"/>
         <path d="M60 115 C55 95 48 75 46 52 C50 62 55 78 57 88 C54 72 53 48 60 30 C67 48 66 72 63 88 C65 78 70 62 74 52 C72 75 65 95 60 115Z"/>
