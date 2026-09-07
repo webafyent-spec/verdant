@@ -765,7 +765,7 @@ body {
   .about-container { flex-direction: column; }
   .about-left { position: relative; width: 100%; height: 40vh; }
   .about-right { flex: none; }
-  .about-block { padding: 4rem 2rem; }
+  .about-block { min-height: 0; padding: 3.5rem 1.5rem; }
 
   /* Nav */
   #main-nav { padding: 1rem 1.5rem; }
