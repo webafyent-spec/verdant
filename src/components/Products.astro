@@ -1,44 +1,41 @@
 ---
 // Section 3 — Horizontal scroll showcase with 3D mouse-tilt cards
+// Note: `prerender` must be declared on the page (src/pages/index.astro),
+// not here — Astro only reads that export from route files.
 
-interface Product {
-  name: string;
-  type: string;
-  badge: string;
-  notes: string;
-  price: string;
-  img?: string;
+import { createPublicClient } from '../lib/supabase-public.js';
+
+const supabase = createPublicClient();
+const { data: rows, error } = await supabase
+  .from('products')
+  .select('*')
+  .eq('in_stock', true)
+  .order('created_at', { ascending: false });
+
+if (error) console.error('Failed to load products:', error.message);
+
+function displayType(row: { category: string; strain_type: string | null }) {
+  const cat = row.category.charAt(0).toUpperCase() + row.category.slice(1);
+  if (row.category === 'flower' && row.strain_type) {
+    return `${row.strain_type.charAt(0).toUpperCase() + row.strain_type.slice(1)} Flower`;
+  }
+  return cat;
 }
 
-const products: Product[] = [
-  /* ── SATIVA FLOWER ── */
-  { name: 'DURBAN POISON',      type: 'Pure Sativa Flower',           badge: 'SATIVA',    notes: 'Anise · Citrus · Pine',          price: 'R180', img: '/images/durban-poison.jpg' },
-  { name: 'LEMON HAZE',         type: 'Sativa Flower',                badge: 'SATIVA',    notes: 'Lemon · Citrus · Spice',         price: 'R175', img: '/images/lemon-haze.jpg' },
-  { name: 'GREEN CRACK',        type: 'Sativa Flower',                badge: 'SATIVA',    notes: 'Mango · Citrus · Earthy',        price: 'R185', img: '/images/green-crack.jpg' },
-  /* ── SATIVA-DOMINANT HYBRID FLOWER ── */
-  { name: 'BLUE DREAM',         type: 'Sativa-Dominant Hybrid',       badge: 'HYBRID',    notes: 'Berry · Vanilla · Haze',         price: 'R190', img: '/images/blue-dream.jpg' },
-  { name: 'JACK HERER',         type: 'Sativa-Dominant Hybrid',       badge: 'HYBRID',    notes: 'Pine · Spice · Earthy',          price: 'R195', img: '/images/jack-herer.jpg' },
-  { name: 'GELATO',             type: 'Hybrid Flower',                badge: 'HYBRID',    notes: 'Sweet · Citrus · Lavender',      price: 'R240', img: '/images/gelato.jpg' },
-  /* ── BALANCED / INDICA-DOM HYBRID FLOWER ── */
-  { name: 'OG KUSH',            type: 'Hybrid Flower',                badge: 'HYBRID',    notes: 'Pine · Fuel · Lemon',            price: 'R200', img: '/images/og-kush.jpg' },
-  { name: 'SUNSET SHERBET',     type: 'Indica-Dominant Hybrid',       badge: 'INDICA',    notes: 'Berry · Citrus · Sweet',         price: 'R210', img: '/images/sunset-sherbet.jpg' },
-  { name: 'WEDDING CAKE',       type: 'Indica-Dominant Hybrid',       badge: 'INDICA',    notes: 'Vanilla · Earth · Pepper',       price: 'R220', img: '/images/wedding-cake.jpg' },
-  { name: 'CRITICAL CURE',      type: 'CBD-Rich Flower · 1:1',        badge: 'CBD',       notes: 'Earthy · Floral · Woody',        price: 'R170', img: '/images/critical-cure.jpg' },
-  /* ── HEAVY INDICA FLOWER ── */
-  { name: 'PMB PURPLE',         type: 'Indica Flower · Local Grow',   badge: 'INDICA',    notes: 'Grape · Berry · Floral',         price: 'R160', img: '/images/pmb-purple.jpg' },
-  { name: 'GRANDADDY PURPLE',   type: 'Indica Flower',                badge: 'INDICA',    notes: 'Grape · Berry · Sweet',          price: 'R195', img: '/images/grandaddy-purple.jpg' },
-  /* ── VAPES ── */
-  { name: 'GOLDEN HOUR',        type: 'Hybrid Live Resin Vape',       badge: 'VAPE',      notes: 'Tropical · Diesel · Sweet',      price: 'R350', img: '/images/golden-hour.jpg' },
-  { name: 'MINT CONDITION',     type: 'Indica Distillate Vape',       badge: 'VAPE',      notes: 'Spearmint · Cream · Pine',       price: 'R280', img: '/images/mint-condition.jpg' },
-  /* ── EDIBLES ── */
-  { name: 'DARK FOREST',        type: '72% Dark Chocolate · 100mg',   badge: 'EDIBLE',    notes: 'Cocoa · Sea Salt · Cherry',      price: 'R120', img: '/images/dark-forest-chocolate.jpg' },
-  { name: 'HONEY DROPS',        type: 'Mixed Berry Gummies · 50mg',   badge: 'EDIBLE',    notes: 'Berry · Citrus · Sweet',         price: 'R150', img: '/images/gummies.jpg' },
-  /* ── TINCTURES ── */
-  { name: 'EMBER DROPS',        type: 'Full Spectrum CBD:THC 4:1',    badge: 'TINCTURE',  notes: 'Earthy · Herbal · Clean',        price: 'R380', img: '/images/tincture.jpg' },
-  { name: 'NIGHT CAP',          type: 'CBD:CBN Sleep Tincture',       badge: 'TINCTURE',  notes: 'Chamomile · Lavender · Herbal',  price: 'R420', img: '/images/nightcap-tincture.jpg' },
-  /* ── ACCESSORIES ── */
-  { name: 'THE TREES OF JAR KIT', type: 'Premium Starter Pack',       badge: 'ACCESSORY', notes: 'Grinder · Papers · Case',        price: 'R280', img: '/images/verdant-kit.jpg' },
-];
+function displayBadge(row: { category: string; strain_type: string | null }) {
+  if (row.category === 'flower' && row.strain_type) return row.strain_type.toUpperCase();
+  return row.category.toUpperCase();
+}
+
+const products = (rows || []).map((row) => ({
+  id: row.id,
+  name: row.name,
+  type: displayType(row),
+  badge: displayBadge(row),
+  notes: row.weight_options && row.weight_options.length ? row.weight_options.join(' · ') : (row.description || ''),
+  price: `R${Number(row.price).toFixed(0)}`,
+  img: row.image_url || undefined,
+}));
 ---
 
 <section id="products" class="h-scroll-section">
@@ -50,7 +47,7 @@ const products: Product[] = [
         THE COLLECTION
       </div>
       <div id="products-meta" style="text-align:right;flex-shrink:0;padding-left:2rem;">
-        <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#8B949E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">19 products</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#8B949E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">{products.length} product{products.length === 1 ? '' : 's'}</p>
         <p id="products-scroll-hint" style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:#00C896;letter-spacing:0.1em;">DRAG OR SCROLL ↓</p>
       </div>
     </div>

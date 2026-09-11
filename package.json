@@ -11,8 +11,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/vercel": "^9.0.5",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.116.0",
     "astro": "^5.1.0",
-    "@astrojs/sitemap": "^3.0.0"
+    "browser-image-compression": "^2.0.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",

@@ -1,0 +1,511 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+
+// Middleware already guarantees a session exists for this route.
+const { data: products } = await Astro.locals.supabase
+  .from('products')
+  .select('*')
+  .order('created_at', { ascending: false });
+
+const CATEGORIES = ['flower', 'edibles', 'concentrates', 'accessories', 'other'];
+---
+
+<Layout title="Product Manager — Trees of Jar">
+  <div id="admin-root" style="min-height:100vh;background:#06080A;color:#FFFFFF;font-family:'Space Grotesk',sans-serif;">
+
+    <!-- Header -->
+    <header style="border-bottom:1px solid rgba(0,200,150,0.15);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <h1 style="font-size:1.1rem;font-weight:700;letter-spacing:-0.02em;margin:0;">Trees of Jar — Product Manager</h1>
+      <form method="POST" action="/api/auth/signout">
+        <button type="submit" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#8B949E;font-family:inherit;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.55rem 1rem;cursor:pointer;">
+          Log Out
+        </button>
+      </form>
+    </header>
+
+    <main style="max-width:1200px;margin:0 auto;padding:2rem;">
+
+      <!-- Controls -->
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;flex:1;min-width:260px;">
+          <input id="search-input" type="text" placeholder="Search by product name…"
+            style="flex:1;min-width:200px;background:#0D1117;border:1px solid rgba(0,200,150,0.2);color:#FFFFFF;font-family:inherit;font-size:0.85rem;padding:0.65rem 0.9rem;outline:none;" />
+          <select id="category-filter"
+            style="background:#0D1117;border:1px solid rgba(0,200,150,0.2);color:#FFFFFF;font-family:inherit;font-size:0.85rem;padding:0.65rem 0.9rem;outline:none;">
+            <option value="">All Categories</option>
+            <option value="flower">Flower</option>
+            <option value="edibles">Edibles</option>
+            <option value="concentrates">Concentrates</option>
+            <option value="accessories">Accessories</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button id="add-product-btn" type="button"
+          style="background:#00C896;color:#06080A;border:none;font-family:inherit;font-size:0.82rem;font-weight:700;letter-spacing:0.04em;padding:0.7rem 1.25rem;cursor:pointer;white-space:nowrap;">
+          + Add New Product
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div style="border:1px solid rgba(0,200,150,0.15);overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(0,200,150,0.15);text-align:left;">
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Image</th>
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Name</th>
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Category</th>
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Price</th>
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;">Stock</th>
+              <th style="padding:0.85rem 1rem;color:#8B949E;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;"></th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
+        </table>
+        <p id="empty-state" style="display:none;padding:2.5rem;text-align:center;color:#8B949E;font-size:0.85rem;">No products match your search.</p>
+      </div>
+    </main>
+
+    <!-- Add / Edit modal -->
+    <div id="product-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:flex-start;justify-content:center;overflow-y:auto;padding:3rem 1.5rem;">
+      <form id="product-form" style="background:#0D1117;border:1px solid rgba(0,200,150,0.25);width:100%;max-width:560px;padding:2rem;display:flex;flex-direction:column;gap:1.1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h2 id="modal-title" style="font-size:1.1rem;font-weight:700;margin:0;">Add Product</h2>
+          <button type="button" id="modal-close" style="background:none;border:none;color:#8B949E;font-size:1.4rem;cursor:pointer;line-height:1;">&times;</button>
+        </div>
+
+        <input type="hidden" id="product-id" />
+
+        <label style="display:flex;flex-direction:column;gap:0.35rem;">
+          <span class="field-label">Product Name *</span>
+          <input id="field-name" type="text" required class="field-input" />
+        </label>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <label style="display:flex;flex-direction:column;gap:0.35rem;flex:1;min-width:160px;">
+            <span class="field-label">Category *</span>
+            <select id="field-category" required class="field-input">
+              {CATEGORIES.map((c) => <option value={c}>{c[0].toUpperCase() + c.slice(1)}</option>)}
+            </select>
+          </label>
+          <label id="strain-type-wrap" style="display:none;flex-direction:column;gap:0.35rem;flex:1;min-width:160px;">
+            <span class="field-label">Strain Type</span>
+            <select id="field-strain-type" class="field-input">
+              <option value="">—</option>
+              <option value="indica">Indica</option>
+              <option value="sativa">Sativa</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <label style="display:flex;flex-direction:column;gap:0.35rem;flex:1;min-width:140px;">
+            <span class="field-label">Price (R) *</span>
+            <input id="field-price" type="number" step="0.01" min="0" required class="field-input" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:0.35rem;flex:1;min-width:140px;">
+            <span class="field-label">THC %</span>
+            <input id="field-thc" type="number" step="0.1" min="0" max="100" class="field-input" />
+          </label>
+        </div>
+
+        <label style="display:flex;flex-direction:column;gap:0.35rem;">
+          <span class="field-label">Weight Options</span>
+          <div id="weight-tags" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.35rem;"></div>
+          <div style="display:flex;gap:0.5rem;">
+            <input id="field-weight-input" type="text" placeholder="Type a weight, e.g. 3.5g" class="field-input" style="flex:1;" />
+            <button type="button" id="add-weight-btn" style="background:none;border:1px solid rgba(0,200,150,0.3);color:#00C896;font-family:inherit;font-size:0.8rem;font-weight:700;padding:0 1rem;cursor:pointer;white-space:nowrap;">Add</button>
+          </div>
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:0.35rem;">
+          <span class="field-label">Description</span>
+          <textarea id="field-description" rows="3" class="field-input" style="resize:vertical;"></textarea>
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:0.35rem;">
+          <span class="field-label">Product Image</span>
+          <div id="drop-zone" style="border:1.5px dashed rgba(0,200,150,0.3);padding:1.5rem;text-align:center;cursor:pointer;position:relative;">
+            <input id="field-image-input" type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;" />
+            <div id="drop-zone-empty">
+              <p style="font-size:0.8rem;color:#8B949E;margin:0;">Drag & drop an image, or click to browse</p>
+            </div>
+            <div id="drop-zone-preview" style="display:none;">
+              <img id="preview-img" style="max-width:100%;max-height:140px;object-fit:contain;display:block;margin:0 auto 0.6rem;" />
+              <button type="button" id="remove-image-btn" style="position:relative;z-index:2;background:none;border:1px solid rgba(255,255,255,0.25);color:#8B949E;font-family:inherit;font-size:0.72rem;padding:0.35rem 0.75rem;cursor:pointer;">Remove</button>
+            </div>
+            <div id="upload-status" style="display:none;font-size:0.78rem;color:#00C896;margin-top:0.5rem;">Compressing & uploading…</div>
+          </div>
+        </label>
+
+        <label style="display:flex;align-items:center;gap:0.6rem;">
+          <input id="field-in-stock" type="checkbox" checked style="width:16px;height:16px;accent-color:#00C896;" />
+          <span class="field-label" style="text-transform:none;letter-spacing:normal;">In Stock</span>
+        </label>
+
+        <div id="form-error" style="display:none;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#ff8080;font-size:0.8rem;padding:0.65rem 0.9rem;"></div>
+
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:0.5rem;">
+          <button type="button" id="cancel-btn" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#8B949E;font-family:inherit;font-size:0.82rem;font-weight:600;padding:0.65rem 1.25rem;cursor:pointer;">Cancel</button>
+          <button type="submit" id="save-btn" style="background:#00C896;color:#06080A;border:none;font-family:inherit;font-size:0.82rem;font-weight:700;padding:0.65rem 1.5rem;cursor:pointer;">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Delete confirmation modal -->
+    <div id="delete-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:1.5rem;">
+      <div style="background:#0D1117;border:1px solid rgba(255,80,80,0.3);width:100%;max-width:380px;padding:1.75rem;">
+        <p style="font-size:0.95rem;margin:0 0 1.25rem;">Delete <strong id="delete-product-name"></strong>? This cannot be undone.</p>
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+          <button type="button" id="delete-cancel-btn" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#8B949E;font-family:inherit;font-size:0.82rem;font-weight:600;padding:0.6rem 1.1rem;cursor:pointer;">Cancel</button>
+          <button type="button" id="delete-confirm-btn" style="background:#ff5757;color:#06080A;border:none;font-family:inherit;font-size:0.82rem;font-weight:700;padding:0.6rem 1.1rem;cursor:pointer;">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .field-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; color: #8B949E; text-transform: uppercase; }
+    .field-input {
+      background: #06080A; border: 1px solid rgba(0,200,150,0.25); color: #FFFFFF;
+      font-family: inherit; font-size: 0.9rem; padding: 0.6rem 0.8rem; outline: none; width: 100%;
+      box-sizing: border-box;
+    }
+    .weight-tag {
+      display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(0,200,150,0.12);
+      border: 1px solid rgba(0,200,150,0.3); color: #00C896; font-size: 0.75rem; padding: 0.25rem 0.5rem 0.25rem 0.65rem;
+    }
+    .weight-tag button { background: none; border: none; color: #00C896; cursor: pointer; font-size: 0.85rem; line-height: 1; padding: 0; }
+    .stock-badge { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.55rem; display: inline-block; }
+    .stock-badge.in { background: rgba(0,200,150,0.12); color: #00C896; }
+    .stock-badge.out { background: rgba(255,87,87,0.12); color: #ff5757; }
+    .row-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #8B949E; font-family: inherit; font-size: 0.72rem; font-weight: 600; padding: 0.4rem 0.7rem; cursor: pointer; margin-right: 0.4rem; }
+    .row-btn:hover { border-color: rgba(0,200,150,0.4); color: #00C896; }
+    .row-btn.danger:hover { border-color: rgba(255,87,87,0.5); color: #ff5757; }
+  </style>
+
+  <script define:vars={{ initialProducts: products || [] }}>
+    window.__INITIAL_PRODUCTS__ = initialProducts;
+  </script>
+
+  <script>
+    import imageCompression from 'browser-image-compression';
+    import { createClient } from '../../lib/supabase-browser.js';
+
+    const supabase = createClient();
+    let allProducts = window.__INITIAL_PRODUCTS__ || [];
+    let weightTags = [];
+    let pendingImageUrl = null;
+    let editingId = null;
+
+    const tbody = document.getElementById('products-tbody');
+    const emptyState = document.getElementById('empty-state');
+    const searchInput = document.getElementById('search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    const modal = document.getElementById('product-modal');
+    const form = document.getElementById('product-form');
+    const formError = document.getElementById('form-error');
+    const deleteModal = document.getElementById('delete-modal');
+    let pendingDeleteId = null;
+
+    function currency(n) {
+      return 'R' + Number(n).toFixed(2);
+    }
+
+    function renderTable() {
+      const q = searchInput.value.trim().toLowerCase();
+      const cat = categoryFilter.value;
+      const filtered = allProducts.filter((p) => {
+        const matchesSearch = !q || p.name.toLowerCase().includes(q);
+        const matchesCat = !cat || p.category === cat;
+        return matchesSearch && matchesCat;
+      });
+
+      tbody.innerHTML = '';
+      emptyState.style.display = filtered.length ? 'none' : 'block';
+
+      filtered.forEach((p) => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+        tr.innerHTML = `
+          <td style="padding:0.7rem 1rem;">
+            ${p.image_url
+              ? `<img src="${p.image_url}" alt="" style="width:44px;height:44px;object-fit:cover;display:block;" />`
+              : `<div style="width:44px;height:44px;background:#06080A;border:1px solid rgba(255,255,255,0.1);"></div>`}
+          </td>
+          <td style="padding:0.7rem 1rem;font-weight:600;">${escapeHtml(p.name)}</td>
+          <td style="padding:0.7rem 1rem;color:#8B949E;text-transform:capitalize;">${escapeHtml(p.category)}</td>
+          <td style="padding:0.7rem 1rem;color:#00C896;">${currency(p.price)}</td>
+          <td style="padding:0.7rem 1rem;"><span class="stock-badge ${p.in_stock ? 'in' : 'out'}">${p.in_stock ? 'In Stock' : 'Out of Stock'}</span></td>
+          <td style="padding:0.7rem 1rem;white-space:nowrap;text-align:right;">
+            <button type="button" class="row-btn" data-edit="${p.id}">Edit</button>
+            <button type="button" class="row-btn danger" data-delete="${p.id}">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str ?? '';
+      return div.innerHTML;
+    }
+
+    async function refetchProducts() {
+      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      if (!error) {
+        allProducts = data || [];
+        renderTable();
+      }
+    }
+
+    searchInput.addEventListener('input', renderTable);
+    categoryFilter.addEventListener('change', renderTable);
+    renderTable();
+
+    // ── Row actions (edit / delete) ──
+    tbody.addEventListener('click', (e) => {
+      const editId = e.target.getAttribute('data-edit');
+      const delId = e.target.getAttribute('data-delete');
+      if (editId) openModal(allProducts.find((p) => p.id === editId));
+      if (delId) {
+        const product = allProducts.find((p) => p.id === delId);
+        pendingDeleteId = delId;
+        document.getElementById('delete-product-name').textContent = product ? product.name : 'this product';
+        deleteModal.style.display = 'flex';
+      }
+    });
+
+    document.getElementById('delete-cancel-btn').addEventListener('click', () => {
+      deleteModal.style.display = 'none';
+      pendingDeleteId = null;
+    });
+
+    document.getElementById('delete-confirm-btn').addEventListener('click', async () => {
+      if (!pendingDeleteId) return;
+      const { error } = await supabase.from('products').delete().eq('id', pendingDeleteId);
+      deleteModal.style.display = 'none';
+      pendingDeleteId = null;
+      if (!error) refetchProducts();
+    });
+
+    // ── Add / Edit modal ──
+    const categoryField = document.getElementById('field-category');
+    const strainWrap = document.getElementById('strain-type-wrap');
+
+    function syncStrainVisibility() {
+      strainWrap.style.display = categoryField.value === 'flower' ? 'flex' : 'none';
+    }
+    categoryField.addEventListener('change', syncStrainVisibility);
+
+    function resetForm() {
+      form.reset();
+      editingId = null;
+      weightTags = [];
+      pendingImageUrl = null;
+      renderWeightTags();
+      resetImagePreview();
+      formError.style.display = 'none';
+      document.getElementById('field-in-stock').checked = true;
+      syncStrainVisibility();
+    }
+
+    function openModal(product) {
+      resetForm();
+      document.getElementById('modal-title').textContent = product ? 'Edit Product' : 'Add Product';
+      if (product) {
+        editingId = product.id;
+        document.getElementById('product-id').value = product.id;
+        document.getElementById('field-name').value = product.name || '';
+        document.getElementById('field-category').value = product.category || 'flower';
+        document.getElementById('field-strain-type').value = product.strain_type || '';
+        document.getElementById('field-price').value = product.price ?? '';
+        document.getElementById('field-thc').value = product.thc_percentage ?? '';
+        document.getElementById('field-description').value = product.description || '';
+        document.getElementById('field-in-stock').checked = !!product.in_stock;
+        weightTags = Array.isArray(product.weight_options) ? [...product.weight_options] : [];
+        renderWeightTags();
+        if (product.image_url) {
+          pendingImageUrl = product.image_url;
+          showImagePreview(product.image_url);
+        }
+        syncStrainVisibility();
+      }
+      modal.style.display = 'flex';
+    }
+
+    document.getElementById('add-product-btn').addEventListener('click', () => openModal(null));
+    document.getElementById('modal-close').addEventListener('click', () => (modal.style.display = 'none'));
+    document.getElementById('cancel-btn').addEventListener('click', () => (modal.style.display = 'none'));
+
+    // ── Weight options tag input ──
+    const weightInput = document.getElementById('field-weight-input');
+    const weightTagsEl = document.getElementById('weight-tags');
+
+    function renderWeightTags() {
+      weightTagsEl.innerHTML = '';
+      weightTags.forEach((tag, i) => {
+        const span = document.createElement('span');
+        span.className = 'weight-tag';
+        span.innerHTML = `${escapeHtml(tag)} <button type="button" aria-label="Remove ${escapeHtml(tag)}">&times;</button>`;
+        span.querySelector('button').addEventListener('click', () => {
+          weightTags.splice(i, 1);
+          renderWeightTags();
+        });
+        weightTagsEl.appendChild(span);
+      });
+    }
+
+    function addWeightTag() {
+      const val = weightInput.value.trim();
+      if (val && !weightTags.includes(val)) {
+        weightTags.push(val);
+        renderWeightTags();
+      }
+      weightInput.value = '';
+    }
+
+    weightInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addWeightTag();
+      }
+    });
+    document.getElementById('add-weight-btn').addEventListener('click', addWeightTag);
+
+    // ── Image upload: compression + Supabase Storage ──
+    const dropZone = document.getElementById('drop-zone');
+    const imageInput = document.getElementById('field-image-input');
+    const dropZoneEmpty = document.getElementById('drop-zone-empty');
+    const dropZonePreview = document.getElementById('drop-zone-preview');
+    const previewImg = document.getElementById('preview-img');
+    const uploadStatus = document.getElementById('upload-status');
+
+    function showImagePreview(url) {
+      previewImg.src = url;
+      dropZoneEmpty.style.display = 'none';
+      dropZonePreview.style.display = 'block';
+    }
+
+    function resetImagePreview() {
+      previewImg.src = '';
+      dropZoneEmpty.style.display = 'block';
+      dropZonePreview.style.display = 'none';
+      uploadStatus.style.display = 'none';
+      imageInput.value = '';
+    }
+
+    document.getElementById('remove-image-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      pendingImageUrl = null;
+      resetImagePreview();
+    });
+
+    async function handleImageUpload(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+
+      uploadStatus.style.display = 'block';
+      dropZoneEmpty.style.display = 'none';
+      dropZonePreview.style.display = 'none';
+
+      const options = {
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        fileType: 'image/webp',
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        const path = `${crypto.randomUUID()}.webp`;
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(path, compressedFile, { contentType: 'image/webp', upsert: false });
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from('product-images').getPublicUrl(path);
+        pendingImageUrl = data.publicUrl;
+        uploadStatus.style.display = 'none';
+        showImagePreview(pendingImageUrl);
+      } catch (err) {
+        console.error('Image compression/upload failed:', err);
+        uploadStatus.style.display = 'none';
+        dropZoneEmpty.style.display = 'block';
+        formError.textContent = 'Image upload failed — please try a different image.';
+        formError.style.display = 'block';
+      }
+    }
+
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) handleImageUpload(file);
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = 'rgba(0,200,150,0.7)';
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.style.borderColor = 'rgba(0,200,150,0.3)';
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = 'rgba(0,200,150,0.3)';
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) handleImageUpload(file);
+    });
+
+    // ── Save (insert or update) ──
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formError.style.display = 'none';
+
+      const name = document.getElementById('field-name').value.trim();
+      const category = document.getElementById('field-category').value;
+      const price = parseFloat(document.getElementById('field-price').value);
+
+      if (!name || !category || Number.isNaN(price)) {
+        formError.textContent = 'Please fill in all required fields.';
+        formError.style.display = 'block';
+        return;
+      }
+
+      const thcRaw = document.getElementById('field-thc').value;
+      const payload = {
+        name,
+        category,
+        strain_type: category === 'flower' ? (document.getElementById('field-strain-type').value || null) : null,
+        price,
+        weight_options: weightTags,
+        thc_percentage: thcRaw === '' ? null : parseFloat(thcRaw),
+        description: document.getElementById('field-description').value.trim() || null,
+        image_url: pendingImageUrl,
+        in_stock: document.getElementById('field-in-stock').checked,
+      };
+
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+
+      const { error } = editingId
+        ? await supabase.from('products').update(payload).eq('id', editingId)
+        : await supabase.from('products').insert(payload);
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save';
+
+      if (error) {
+        formError.textContent = error.message || 'Something went wrong saving this product.';
+        formError.style.display = 'block';
+        return;
+      }
+
+      modal.style.display = 'none';
+      await refetchProducts();
+    });
+  </script>
+</Layout>
