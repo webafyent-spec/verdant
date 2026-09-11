@@ -32,7 +32,8 @@ const products = (rows || []).map((row) => ({
   name: row.name,
   type: displayType(row),
   badge: displayBadge(row),
-  notes: row.weight_options && row.weight_options.length ? row.weight_options.join(' · ') : (row.description || ''),
+  notes: row.description || '',
+  weights: row.weight_options && row.weight_options.length ? row.weight_options.join(' · ') : '',
   price: `R${Number(row.price).toFixed(0)}`,
   img: row.image_url || undefined,
 }));
@@ -102,9 +103,16 @@ const products = (rows || []).map((row) => ({
             <p style="font-family:'Space Grotesk',sans-serif;font-size:0.75rem;color:#8B949E;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.5rem;">
               {p.type}
             </p>
-            <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:rgba(139,148,158,0.6);font-style:italic;">
-              {p.notes}
-            </p>
+            {p.notes && (
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;color:rgba(139,148,158,0.6);font-style:italic;margin-bottom:0.35rem;">
+                {p.notes}
+              </p>
+            )}
+            {p.weights && (
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:0.68rem;color:#00C896;letter-spacing:0.04em;">
+                {p.weights}
+              </p>
+            )}
           </div>
 
           <!-- Bottom section -->
